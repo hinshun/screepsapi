@@ -26,7 +26,7 @@ func (c *Client) Signin(email, password string) error {
 	}
 	authSigninResp := AuthSigninResponse{}
 
-	err := c.Post(authSigninPath, &authSigninReq, &authSigninResp, nil, http.StatusOK)
+	err := c.post(authSigninPath, &authSigninReq, &authSigninResp, nil, http.StatusOK)
 	if err != nil {
 		return fmt.Errorf("failed to post auth signin: %s", err)
 	}

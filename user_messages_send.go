@@ -25,7 +25,7 @@ func (c *Client) UserMessagesSend(respondent, text string) (UserMessagesSendResp
 	}
 	userMessagesSendResp := UserMessagesSendResponse{}
 
-	err := c.Post(userMessagesSendPath, &userMessagesSendReq, &userMessagesSendResp, nil, http.StatusOK)
+	err := c.post(userMessagesSendPath, &userMessagesSendReq, &userMessagesSendResp, nil, http.StatusOK)
 	if err != nil {
 		return userMessagesSendResp, fmt.Errorf("failed to post user messages send: %s", err)
 	}

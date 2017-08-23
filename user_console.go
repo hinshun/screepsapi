@@ -27,6 +27,7 @@ type UserConsoleOpsResponse struct {
 	ID         string `json:"_id"`
 	User       string `json:"user"`
 	Expression string `json:"expression"`
+	Hidden     bool   `json:"hidden"`
 }
 
 func (u *UserConsoleResponse) IsOk() bool {
@@ -42,7 +43,7 @@ func (c *Client) UserConsole(shard, expression string) (UserConsoleResponse, err
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.Post(userConsolePath, &userConsoleReq, &userConsoleResp, values, http.StatusOK)
+	err := c.post(userConsolePath, &userConsoleReq, &userConsoleResp, values, http.StatusOK)
 	if err != nil {
 		return userConsoleResp, fmt.Errorf("failed to post user console: %s", err)
 	}

@@ -36,52 +36,44 @@ type StatsPointResponse struct {
 }
 
 type StatsMaxResponse struct {
-	CreepsLost8            int `json:creepsLost8"`
-	CreepsLost180          int `json:creepsLost180"`
-	CreepsLost1440         int `json:creepsLost1440"`
-	CreepsProduced8        int `json:creepsProduced8"`
-	CreepsProduced180      int `json:creepsProduced180"`
-	CreepsProduced1440     int `json:creepsProduced1440"`
-	Energy8                int `json:energy8"`
-	Energy180              int `json:energy180"`
-	Energy1440             int `json:energy1440"`
-	EnergyConstruction8    int `json:energyConstruction8"`
-	EnergyConstruction180  int `json:energyConstruction180"`
-	EnergyConstruction1440 int `json:energyConstruction1440"`
-	EnergyControl8         int `json:energyControl8"`
-	EnergyControl180       int `json:energyControl180"`
-	EnergyControl1440      int `json:energyControl1440"`
-	EnergyCreeps8          int `json:energyCreeps8"`
-	EnergyCreeps180        int `json:energyCreeps180"`
-	EnergyCreeps1440       int `json:energyCreeps1440"`
-	EnergyHarvested8       int `json:energyHarvested8"`
-	EnergyHarvested180     int `json:energyHarvested180"`
-	EnergyHarvested1440    int `json:energyHarvested1440"`
-	Power8                 int `json:power8"`
-	Power180               int `json:power180"`
-	Power1440              int `json:power1440"`
-	PowerProcessed8        int `json:powerProcessed8"`
-	PowerProcessed180      int `json:powerProcessed180"`
-	PowerProcessed1440     int `json:powerProcessed1440"`
+	CreepsLost1Hour           int `json:creepsLost8"`
+	CreepsLost24Hours         int `json:creepsLost180"`
+	CreepsLost7Days           int `json:creepsLost1440"`
+	CreepsProduced1Hour       int `json:creepsProduced8"`
+	CreepsProduced24Hours     int `json:creepsProduced180"`
+	CreepsProduced7Days       int `json:creepsProduced1440"`
+	Energy1Hour               int `json:energy8"`
+	Energy24Hours             int `json:energy180"`
+	Energy7Days               int `json:energy1440"`
+	EnergyConstruction1Hour   int `json:energyConstruction8"`
+	EnergyConstruction24Hours int `json:energyConstruction180"`
+	EnergyConstruction7Days   int `json:energyConstruction1440"`
+	EnergyControl1Hour        int `json:energyControl8"`
+	EnergyControl24Hours      int `json:energyControl180"`
+	EnergyControl7Days        int `json:energyControl1440"`
+	EnergyCreeps1Hour         int `json:energyCreeps8"`
+	EnergyCreeps24Hours       int `json:energyCreeps180"`
+	EnergyCreeps7Days         int `json:energyCreeps1440"`
+	EnergyHarvested1Hour      int `json:energyHarvested8"`
+	EnergyHarvested24Hours    int `json:energyHarvested180"`
+	EnergyHarvested7Days      int `json:energyHarvested1440"`
+	Power1Hour                int `json:power8"`
+	Power24Hours              int `json:power180"`
+	Power7Days                int `json:power1440"`
+	PowerProcessed1Hour       int `json:powerProcessed8"`
+	PowerProcessed24Hours     int `json:powerProcessed180"`
+	PowerProcessed7Days       int `json:powerProcessed1440"`
 }
 
-type TotalsResponse struct {
-	CreepsProduced     int `json:"creepsProduced"`
-	EnergyConstruction int `json:"energyConstruction"`
-	EnergyControl      int `json:"energyControl"`
-	EnergyCreeps       int `json:"energyCreeps"`
-	EnergyHarvested    int `json:"energyHarvested"`
-}
-
-func (c *Client) RoomOverview(shard, room, interval string) (RoomOverviewResponse, error) {
+func (c *Client) RoomOverview(shard, room string, statsPeriod StatsPeriod) (RoomOverviewResponse, error) {
 	roomOverviewResp := RoomOverviewResponse{}
 
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 	values.Add(roomKey, room)
-	values.Add(intervalKey, interval)
+	values.Add(intervalKey, string(statsPeriod))
 
-	err := c.Get(roomOverviewPath, &roomOverviewResp, values, http.StatusOK)
+	err := c.get(roomOverviewPath, &roomOverviewResp, values, http.StatusOK)
 	if err != nil {
 		return roomOverviewResp, fmt.Errorf("failed to get room overview: %s", err)
 	}

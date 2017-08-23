@@ -21,7 +21,7 @@ func (c *Client) XsollaUser(shard string) (XsollaUserResponse, error) {
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.Get(xsollaUserPath, &xsollaUserResp, values, http.StatusOK)
+	err := c.get(xsollaUserPath, &xsollaUserResp, values, http.StatusOK)
 	if err != nil {
 		return xsollaUserResp, fmt.Errorf("failed to get xsolla user: %s", err)
 	}

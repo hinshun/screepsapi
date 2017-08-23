@@ -43,7 +43,7 @@ func (c *Client) AuthMe(shard string) (AuthMeResponse, error) {
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.Get(authMePath, &authMeResp, values, http.StatusOK)
+	err := c.get(authMePath, &authMeResp, values, http.StatusOK)
 	if err != nil {
 		return authMeResp, fmt.Errorf("failed to get auth me: %s", err)
 	}

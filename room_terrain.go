@@ -43,7 +43,7 @@ func (c *Client) RoomTerrain(shard, room string, encoded bool) (RoomTerrainRespo
 		values.Add(encodedKey, queryTrue)
 	}
 
-	err := c.Get(roomTerrainPath, &roomTerrainResp, values, http.StatusOK)
+	err := c.get(roomTerrainPath, &roomTerrainResp, values, http.StatusOK)
 	if err != nil {
 		return roomTerrainResp, fmt.Errorf("failed to get room terrain: %s", err)
 	}

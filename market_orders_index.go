@@ -26,7 +26,7 @@ func (c *Client) MarketOrdersIndex(shard string) (MarketOrdersIndexResponse, err
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.Get(marketOrdersIndexPath, &marketOrdersIndexResp, values, http.StatusOK)
+	err := c.get(marketOrdersIndexPath, &marketOrdersIndexResp, values, http.StatusOK)
 	if err != nil {
 		return marketOrdersIndexResp, fmt.Errorf("failed to get market orders index: %s", err)
 	}

@@ -35,7 +35,7 @@ func (c *Client) RoomStatus(shard, room string) (RoomStatusResponse, error) {
 	values.Add(shardKey, shard)
 	values.Add(roomKey, room)
 
-	err := c.Get(roomStatusPath, &roomStatusResp, values, http.StatusOK)
+	err := c.get(roomStatusPath, &roomStatusResp, values, http.StatusOK)
 	if err != nil {
 		return roomStatusResp, fmt.Errorf("failed to get room status: %s", err)
 	}

@@ -7,11 +7,11 @@ import (
 )
 
 type UserMessagesListResponse struct {
-	Ok       int                              `json:"ok"`
-	Messages []UserMessageListMessageResponse `json:"messages"`
+	Ok       int                   `json:"ok"`
+	Messages []UserMessageResponse `json:"messages"`
 }
 
-type UserMessageListMessageResponse struct {
+type UserMessageResponse struct {
 	ID     string `json:"_id"`
 	Date   string `json:"date"`
 	Type   string `json:"type"`
@@ -29,7 +29,7 @@ func (c *Client) UserMessagesList(respondent string) (UserMessagesListResponse, 
 	values := make(url.Values)
 	values.Add(respondentKey, respondent)
 
-	err := c.Get(userMessagesListPath, &userMessagesListResp, values, http.StatusOK)
+	err := c.get(userMessagesListPath, &userMessagesListResp, values, http.StatusOK)
 	if err != nil {
 		return userMessagesListResp, fmt.Errorf("failed to get user messages list: %s", err)
 	}

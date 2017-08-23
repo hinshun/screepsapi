@@ -54,7 +54,7 @@ func NewClient(credentials Credentials) (*Client, error) {
 	return client, nil
 }
 
-func (c *Client) Get(path string, resp interface{}, values url.Values, statusCode int) error {
+func (c *Client) get(path string, resp interface{}, values url.Values, statusCode int) error {
 	getURL, _ := url.Parse(c.serverURL.String())
 	getURL.Path = fmt.Sprintf("%s/%s", apiPath, path)
 	getURL.RawQuery = values.Encode()
@@ -64,7 +64,7 @@ func (c *Client) Get(path string, resp interface{}, values url.Values, statusCod
 		return fmt.Errorf("failed to create new GET request: %s", err)
 	}
 
-	httpResp, err := c.Do(req)
+	httpResp, err := c.do(req)
 	if err != nil {
 		return fmt.Errorf("failed to GET '%s': %s", getURL, err)
 	}
@@ -93,7 +93,7 @@ func (c *Client) Get(path string, resp interface{}, values url.Values, statusCod
 	return nil
 }
 
-func (c *Client) Post(path string, req, resp interface{}, values url.Values, statusCode int) error {
+func (c *Client) post(path string, req, resp interface{}, values url.Values, statusCode int) error {
 	reqJSON, err := json.Marshal(req)
 	if err != nil {
 		return fmt.Errorf("failed to marshal request: %s", err)
@@ -111,7 +111,7 @@ func (c *Client) Post(path string, req, resp interface{}, values url.Values, sta
 	}
 	httpReq.Header.Set("Content-Type", contentType)
 
-	httpResp, err := c.Do(httpReq)
+	httpResp, err := c.do(httpReq)
 	if err != nil {
 		return fmt.Errorf("failed to POST '%s': %s", postURL, err)
 	}
@@ -140,7 +140,7 @@ func (c *Client) Post(path string, req, resp interface{}, values url.Values, sta
 	return nil
 }
 
-func (c *Client) Do(req *http.Request) (*http.Response, error) {
+func (c *Client) do(req *http.Request) (*http.Response, error) {
 	req.Header.Set(tokenHeader, c.token)
 	req.Header.Set(usernameHeader, c.token)
 	return c.httpClient.Do(req)

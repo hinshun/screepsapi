@@ -23,7 +23,7 @@ func (l *LeaderboardSeasonsResponse) IsOk() bool {
 
 func (c *Client) LeaderboardSeasons() (LeaderboardSeasonsResponse, error) {
 	leaderboardSeasonsResp := LeaderboardSeasonsResponse{}
-	err := c.Get(leaderboardSeasonsPath, &leaderboardSeasonsResp, nil, http.StatusOK)
+	err := c.get(leaderboardSeasonsPath, &leaderboardSeasonsResp, nil, http.StatusOK)
 	if err != nil {
 		return leaderboardSeasonsResp, fmt.Errorf("failed to get leaderboard season: %s", err)
 	}

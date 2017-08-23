@@ -10,7 +10,7 @@ import (
 func test() error {
 	client, err := screepsapi.NewClient(screepsapi.Credentials{
 		Email:     "edgarhinshunlee@gmail.com",
-		Password:  "",
+		Password:  "X9*pBPYS3WgywbR12EgqcjKgoC2#RJZh",
 		ServerURL: "https://screeps.com",
 	})
 	if err != nil {
@@ -47,7 +47,7 @@ func test() error {
 	// }
 	// fmt.Printf("leaderboard/seasons: %#v\n", leaderboardSeasons)
 
-	// roomOverview, err := client.RoomOverview("shard1", "E23S26", "8")
+	// roomOverview, err := client.RoomOverview("shard1", "E23S26", screepsapi.StatsPeriod1Hour)
 	// if err != nil {
 	//	return err
 	// }
@@ -100,6 +100,43 @@ func test() error {
 	// 	return err
 	// }
 	// fmt.Printf("user/messages/send: %#v\n", userConsole)
+
+	// userFind, err := client.UserFind("", "hinshun")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/find: %#v\n", userFind)
+
+	// userMemory, err := client.UserMemory("shard1", "flags")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/memory: %#v\n", userMemory)
+
+	// userMemoryConsole, err := client.UpdateUserMemory("shard1", "flags", "test")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/memory: %#v\n", userMemoryConsole)
+
+	// userMemoryConsole, err := client.DeleteUserMemory("shard1", "flags")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/memory: %#v\n", userMemoryConsole)
+
+	// TODO(hinshun): unconfirmed struct types
+	// userMoneyHistory, err := client.UserMoneyHistory()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/money-history: %#v\n", userMoneyHistory)
+
+	// userOverview, err := client.UserOverview("", screepsapi.StatsPeriodNone)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/overview: %#v\n", userOverview)
 
 	return nil
 }

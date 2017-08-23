@@ -54,15 +54,18 @@ const (
 
 	// Query params
 	encodedKey    = "encoded"
+	idKey         = "id"
 	intervalKey   = "interval"
 	limitKey      = "limit"
 	modeKey       = "mode"
 	offsetKey     = "offset"
+	pathKey       = "path"
+	respondentKey = "respondent"
 	roomKey       = "room"
 	seasonKey     = "season"
 	shardKey      = "shard"
+	statNameKey   = "statName"
 	usernameKey   = "username"
-	respondentKey = "respondent"
 
 	// Query values
 	queryTrue = "true"

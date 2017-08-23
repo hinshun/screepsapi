@@ -35,7 +35,7 @@ func (c *Client) LeaderboardFind(mode, username, season string) (LeaderboardFind
 		values.Add(seasonKey, season)
 	}
 
-	err := c.Get(leaderboardFindPath, &leaderboardFindResp, values, http.StatusOK)
+	err := c.get(leaderboardFindPath, &leaderboardFindResp, values, http.StatusOK)
 	if err != nil {
 		return leaderboardFindResp, fmt.Errorf("failed to get leaderboard find: %s", err)
 	}

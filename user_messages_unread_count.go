@@ -17,7 +17,7 @@ func (u *UserMessagesUnreadCountResponse) IsOk() bool {
 func (c *Client) UserMessagesUnreadCount() (UserMessagesUnreadCountResponse, error) {
 	userMessagesUnreadCountResp := UserMessagesUnreadCountResponse{}
 
-	err := c.Get(userMessagesUnreadCountPath, &userMessagesUnreadCountResp, nil, http.StatusOK)
+	err := c.get(userMessagesUnreadCountPath, &userMessagesUnreadCountResp, nil, http.StatusOK)
 	if err != nil {
 		return userMessagesUnreadCountResp, fmt.Errorf("failed to get user messages unread count: %s", err)
 	}
