@@ -265,6 +265,18 @@ func test() error {
 	// }
 	// fmt.Printf("user/memory: %#v\n", memoryDelete)
 
+	// memorySegment, err := client.MemorySegment("shard1", 0)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/memory-segment: %#v\n", memorySegment)
+
+	// updateMemorySegment, err := client.UpdateMemorySegment("shard1", "", 0)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/memory-segment: %#v\n", updateMemorySegment)
+
 	// moneyHistory, err := client.MoneyHistory()
 	// if err != nil {
 	// 	return err

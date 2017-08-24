@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -109,4 +110,35 @@ func (c *Client) DeleteMemory(shard, path string) (InsertResponse, error) {
 	}
 
 	return insertResp, nil
+}
+
+func (c *Client) MemorySegment(shard string, segment int) (MemorySegmentResponse, error) {
+	memorySegmentResp := MemorySegmentResponse{}
+
+	values := make(url.Values)
+	values.Add(shardKey, shard)
+	values.Add(segmentKey, strconv.Itoa(segment))
+
+	err := c.get(memorySegmentPath, &memorySegmentResp, values, http.StatusOK)
+	if err != nil {
+		return memorySegmentResp, fmt.Errorf("failed to get memory segment: %s", err)
+	}
+
+	return memorySegmentResp, nil
+}
+
+func (c *Client) UpdateMemorySegment(shard, data string, segment int) (Response, error) {
+	updateMemoryReq := UpdateMemoryRequest{
+		Shard:   shard,
+		Data:    data,
+		Segment: segment,
+	}
+	resp := Response{}
+
+	err := c.post(memorySegmentPath, &updateMemoryReq, &resp, nil, http.StatusOK)
+	if err != nil {
+		return resp, fmt.Errorf("failed to update memory segment: %s", err)
+	}
+
+	return resp, nil
 }

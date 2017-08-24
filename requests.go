@@ -92,3 +92,9 @@ type SignInRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type UpdateMemoryRequest struct {
+	Shard   string `json:"shard"`
+	Data    string `json:"data"`
+	Segment int    `json:"segment"`
+}

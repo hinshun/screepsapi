@@ -47,12 +47,11 @@ const (
 
 	// User endpoints
 	// TODO(hinshun): unimplemented
-	activatePTRPath = "user/activate-ptr"
-	branchesPath    = "user/branches"
-	codePath        = "user/code"
-	consolePath     = "user/console"
-	memoryPath      = "user/memory"
-	// TODO(hinshun): unimplemented
+	activatePTRPath   = "user/activate-ptr"
+	branchesPath      = "user/branches"
+	codePath          = "user/code"
+	consolePath       = "user/console"
+	memoryPath        = "user/memory"
 	memorySegmentPath = "user/memory-segment"
 	// TODO(hinshun): unconfirmed struct types
 	moneyHistoryPath           = "user/money-history"
@@ -86,6 +85,7 @@ const (
 	respondentKey   = "respondent"
 	roomKey         = "room"
 	seasonKey       = "season"
+	segmentKey      = "segment"
 	shardKey        = "shard"
 	statNameKey     = "statName"
 	usernameKey     = "username"

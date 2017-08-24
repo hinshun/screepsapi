@@ -99,6 +99,11 @@ type MemoryResponse struct {
 	Data interface{} `json:"data"`
 }
 
+type MemorySegmentResponse struct {
+	Response
+	Data string `json:"data"`
+}
+
 type MessagesIndexResponse struct {
 	Response
 	Messages []MessageWithRecipients `json:"messages"`
