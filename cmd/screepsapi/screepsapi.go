@@ -1,18 +1,34 @@
 package main
 
 import (
+	"bufio"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/hinshun/screepsapi"
 )
 
 func test() error {
-	client, err := screepsapi.NewClient(screepsapi.Credentials{
-		Email:     "edgarhinshunlee@gmail.com",
-		Password:  "X9*pBPYS3WgywbR12EgqcjKgoC2#RJZh",
-		ServerURL: "https://screeps.com",
-	})
+	credentialsFile, err := os.Open("credentials.json")
+	if err != nil {
+		return fmt.Errorf("failed to open credentials file: %s", err)
+	}
+
+	credentialsBytes, err := ioutil.ReadAll(bufio.NewReader(credentialsFile))
+	if err != nil {
+		return fmt.Errorf("failed to read credentials file: %s", err)
+	}
+
+	credentials := screepsapi.Credentials{}
+	err = json.Unmarshal(credentialsBytes, &credentials)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal credentials file: %s", err)
+	}
+
+	client, err := screepsapi.NewClient(credentials)
 	if err != nil {
 		return fmt.Errorf("failed to create screepsapi client: %s", err)
 	}

@@ -28,9 +28,9 @@ type Client struct {
 }
 
 type Credentials struct {
-	Email     string
-	Password  string
-	ServerURL string
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	ServerURL string `json:"serverURL"`
 }
 
 func NewClient(credentials Credentials) (*Client, error) {
