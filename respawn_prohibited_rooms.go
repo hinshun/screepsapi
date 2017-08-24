@@ -10,8 +10,8 @@ type RespawnProhibitedRoomsResponse struct {
 	Rooms []string `json:"rooms"`
 }
 
-func (u *RespawnProhibitedRoomsResponse) IsOk() bool {
-	return u.Ok == 1
+func (r *RespawnProhibitedRoomsResponse) IsOk() bool {
+	return r.Ok == 1
 }
 
 func (c *Client) RespawnProhibitedRooms() (RespawnProhibitedRoomsResponse, error) {

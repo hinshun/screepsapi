@@ -17,8 +17,8 @@ const (
 	WorldStatusNormal             = "normal"
 )
 
-func (u *WorldStatusResponse) IsOk() bool {
-	return u.Ok == 1
+func (w *WorldStatusResponse) IsOk() bool {
+	return w.Ok == 1
 }
 
 func (c *Client) WorldStatus() (WorldStatusResponse, error) {

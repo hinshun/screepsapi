@@ -65,8 +65,8 @@ type ChangeOrderPriceResponse struct {
 	NewPrice int    `json:"newPrice"`
 }
 
-func (u *MoneyHistoryResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MoneyHistoryResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 func (c *Client) MoneyHistory() (MoneyHistoryResponse, error) {

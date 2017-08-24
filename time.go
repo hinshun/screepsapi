@@ -10,8 +10,8 @@ type TimeResponse struct {
 	Ok int `json:"ok"`
 }
 
-func (u *TimeResponse) IsOk() bool {
-	return u.Ok == 1
+func (t *TimeResponse) IsOk() bool {
+	return t.Ok == 1
 }
 
 func (c *Client) Time(shard string) (TimeResponse, error) {

@@ -10,8 +10,8 @@ type MessagesUnreadCountResponse struct {
 	Count int `json:"count"`
 }
 
-func (u *MessagesUnreadCountResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MessagesUnreadCountResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 func (c *Client) MessagesUnreadCount() (MessagesUnreadCountResponse, error) {

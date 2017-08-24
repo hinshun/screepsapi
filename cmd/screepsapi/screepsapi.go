@@ -65,11 +65,23 @@ func test() error {
 	// }
 	// fmt.Printf("game/room-status: %#v\n", roomStatus)
 
+	// marketMyOrders, err := client.MarketMyOrders()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("market/my-orders: %#v\n", marketMyOrders)
+
 	// marketOrdersIndex, err := client.MarketOrdersIndex("shard1")
 	// if err != nil {
 	// 	return err
 	// }
 	// fmt.Printf("market/orders-index: %#v\n", marketOrdersIndex)
+
+	marketOrders, err := client.MarketOrders("shard1", "Z")
+	if err != nil {
+		return err
+	}
+	fmt.Printf("market/orders: %#v\n", marketOrders)
 
 	// time, err := client.Time("shard1")
 	// if err != nil {

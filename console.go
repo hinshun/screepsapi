@@ -30,8 +30,8 @@ type ConsoleOpsResponse struct {
 	Hidden     bool   `json:"hidden"`
 }
 
-func (u *ConsoleResponse) IsOk() bool {
-	return u.Ok == 1
+func (c *ConsoleResponse) IsOk() bool {
+	return c.Ok == 1
 }
 
 func (c *Client) Console(shard, expression string) (ConsoleResponse, error) {

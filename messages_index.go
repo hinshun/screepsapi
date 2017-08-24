@@ -18,8 +18,8 @@ type DetailedMessageResponse struct {
 	Respondent string `json:"respondent"`
 }
 
-func (u *MessagesIndexResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MessagesIndexResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 func (c *Client) MessagesIndex() (MessagesIndexResponse, error) {

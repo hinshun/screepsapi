@@ -21,8 +21,8 @@ type MemoryResponse struct {
 	Data interface{} `json:"data"`
 }
 
-func (u *MemoryResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MemoryResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 type RawMemoryResponse struct {
@@ -33,14 +33,14 @@ type RawMemoryResponse struct {
 // UnmarshalJSON unmarshals the data string, which is of the form `gz:`
 // followed by base64-encoded gzipped JSON encoding of the requested
 // memory path, into a more functional map[string]interface{}.
-func (u *MemoryResponse) UnmarshalJSON(b []byte) error {
+func (m *MemoryResponse) UnmarshalJSON(b []byte) error {
 	rawMemoryResp := RawMemoryResponse{}
 	err := json.Unmarshal(b, &rawMemoryResp)
 	if err != nil {
 		return err
 	}
 
-	u.Ok = rawMemoryResp.Ok
+	m.Ok = rawMemoryResp.Ok
 
 	dataParts := strings.Split(rawMemoryResp.Data, fmt.Sprintf("%s:", memoryDataFormat))
 	if len(dataParts) != 2 && dataParts[0] != memoryDataFormat {
@@ -64,7 +64,7 @@ func (u *MemoryResponse) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to read gzip data: %s", rawMemoryResp.Data)
 	}
 
-	err = json.Unmarshal(unzippedData, &u.Data)
+	err = json.Unmarshal(unzippedData, &m.Data)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal unzipped data: %s", unzippedData)
 	}

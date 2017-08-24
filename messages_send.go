@@ -14,8 +14,8 @@ type MessagesSendResponse struct {
 	Ok int `json:"ok"`
 }
 
-func (u *MessagesSendResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MessagesSendResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 func (c *Client) MessagesSend(respondent, text string) (MessagesSendResponse, error) {

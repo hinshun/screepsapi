@@ -10,8 +10,8 @@ type WorldStartRoomResponse struct {
 	Rooms []string `json:"room"`
 }
 
-func (u *WorldStartRoomResponse) IsOk() bool {
-	return u.Ok == 1
+func (w *WorldStartRoomResponse) IsOk() bool {
+	return w.Ok == 1
 }
 
 func (c *Client) WorldStartRoom() (WorldStartRoomResponse, error) {

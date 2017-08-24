@@ -19,8 +19,8 @@ type MessageResponse struct {
 	Unread bool   `json:"unread"`
 }
 
-func (u *MessagesListResponse) IsOk() bool {
-	return u.Ok == 1
+func (m *MessagesListResponse) IsOk() bool {
+	return m.Ok == 1
 }
 
 func (c *Client) MessagesList(respondent string) (MessagesListResponse, error) {

@@ -6,13 +6,6 @@ type ScreepsAPIResponse interface {
 	IsOk() bool
 }
 
-type UserResponse struct {
-	ID       string        `json:"_id"`
-	Username string        `json:"username"`
-	Badge    BadgeResponse `json:"badge"`
-	GCL      int           `json:"gcl"`
-}
-
 type BadgeResponse struct {
 	Type   json.RawMessage `json:"type"`
 	Color1 json.RawMessage `json:"color1"`
@@ -32,6 +25,22 @@ type BadgeTypePathResponse struct {
 type BadgeColorHexResponse string
 type BadgeColor256Response int
 
+type MarketOrderResponse struct {
+	ID              string    `json:"_id"`
+	RoomName        string    `json:"roomName"`
+	Type            OrderType `json:"type"`
+	Price           float32   `json:"price"`
+	Amount          int       `json:"amount"`
+	RemainingAmount int       `json:"remainingAmount"`
+}
+
+type OrderType string
+
+const (
+	OrderTypeBuy  OrderType = "buy"
+	OrderTypeSell           = "sell"
+)
+
 type StatsPeriod string
 
 const (
@@ -49,4 +58,11 @@ type TotalsResponse struct {
 	EnergyControl      int `json:"energyControl"`
 	EnergyCreeps       int `json:"energyCreeps"`
 	EnergyHarvested    int `json:"energyHarvested"`
+}
+
+type UserResponse struct {
+	ID       string        `json:"_id"`
+	Username string        `json:"username"`
+	Badge    BadgeResponse `json:"badge"`
+	GCL      int           `json:"gcl"`
 }

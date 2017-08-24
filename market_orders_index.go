@@ -7,11 +7,11 @@ import (
 )
 
 type MarketOrdersIndexResponse struct {
-	Ok     int                   `json:"ok"`
-	Orders []MarketOrderResponse `json:"list"`
+	Ok        int                      `json:"ok"`
+	Resources []MarketResourceResponse `json:"list"`
 }
 
-type MarketOrderResponse struct {
+type MarketResourceResponse struct {
 	ID    string `json:"_id"`
 	Count int    `json:"count"`
 }

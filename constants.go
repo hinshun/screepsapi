@@ -17,15 +17,15 @@ const (
 	leaderboardSeasonsPath = "leaderboard/seasons"
 
 	// Game endpoints
-	addObjectIntentPath       = "game/add-object-intent"
-	changeFlagColorPath       = "game/change-flag-color"
-	changeFlagPath            = "game/change-flag"
-	createConstructionPath    = "game/create-construction"
-	createFlagPath            = "game/create-flag"
-	genUniqueObjectNamePath   = "game/gen-unique-object-name"
-	mapStatsPath              = "game/map-stats"
-	setNotifyWhenAttackedPath = "game/set-notify-when-attacked"
-	timePath                  = "game/time"
+	// addObjectIntentPath       = "game/add-object-intent"
+	// changeFlagColorPath       = "game/change-flag-color"
+	// changeFlagPath            = "game/change-flag"
+	// createConstructionPath    = "game/create-construction"
+	// createFlagPath            = "game/create-flag"
+	// genUniqueObjectNamePath   = "game/gen-unique-object-name"
+	// mapStatsPath              = "game/map-stats"
+	// setNotifyWhenAttackedPath = "game/set-notify-when-attacked"
+	timePath = "game/time"
 
 	// Market endpoints
 	marketMyOrdersPath    = "game/market/my-orders"
@@ -33,9 +33,10 @@ const (
 	marketOrdersPath      = "game/market/orders"
 
 	// Messages endpoints
-	messagesIndexPath = "user/messages/index"
-	messagesListPath  = "user/messages/list"
-	messagesSendPath  = "user/messages/send"
+	messagesIndexPath       = "user/messages/index"
+	messagesListPath        = "user/messages/list"
+	messagesSendPath        = "user/messages/send"
+	messagesUnreadCountPath = "user/messages/unread-count"
 
 	// Room endpoints
 	roomOverviewPath = "game/room-overview"
@@ -43,11 +44,11 @@ const (
 	roomTerrainPath  = "game/room-terrain"
 
 	// User endpoints
-	activatePTRPath            = "user/activate-ptr"
-	codePath                   = "user/code"
-	consolePath                = "user/console"
-	memoryPath                 = "user/memory"
-	memorySegmentPath          = "user/memory-segment"
+	// activatePTRPath            = "user/activate-ptr"
+	// codePath                   = "user/code"
+	consolePath = "user/console"
+	memoryPath  = "user/memory"
+	// memorySegmentPath          = "user/memory-segment"
 	moneyHistoryPath           = "user/money-history"
 	respawnProhibitedRoomsPath = "user/respawn-prohibited-rooms"
 	userFindPath               = "user/find"
@@ -60,19 +61,20 @@ const (
 	worldStatusPath    = "user/world-status"
 
 	// Query params
-	encodedKey    = "encoded"
-	idKey         = "id"
-	intervalKey   = "interval"
-	limitKey      = "limit"
-	modeKey       = "mode"
-	offsetKey     = "offset"
-	pathKey       = "path"
-	respondentKey = "respondent"
-	roomKey       = "room"
-	seasonKey     = "season"
-	shardKey      = "shard"
-	statNameKey   = "statName"
-	usernameKey   = "username"
+	encodedKey      = "encoded"
+	idKey           = "id"
+	intervalKey     = "interval"
+	limitKey        = "limit"
+	modeKey         = "mode"
+	offsetKey       = "offset"
+	pathKey         = "path"
+	resourceTypeKey = "resourceType"
+	respondentKey   = "respondent"
+	roomKey         = "room"
+	seasonKey       = "season"
+	shardKey        = "shard"
+	statNameKey     = "statName"
+	usernameKey     = "username"
 
 	// Query values
 	queryTrue = "true"
