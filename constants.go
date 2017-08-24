@@ -2,7 +2,8 @@ package screepsapi
 
 const (
 	// Endpoints
-	apiPath = "api"
+	apiPath     = "api"
+	versionPath = "version"
 
 	// Xsolla endpoints
 	xsollaUserPath = "xsolla/user"
@@ -45,9 +46,11 @@ const (
 
 	// User endpoints
 	// activatePTRPath            = "user/activate-ptr"
-	// codePath                   = "user/code"
-	consolePath = "user/console"
-	memoryPath  = "user/memory"
+	codePath            = "user/code"
+	branchesPath        = "user/branches"
+	setActiveBranchPath = "user/set-active-branch"
+	consolePath         = "user/console"
+	memoryPath          = "user/memory"
 	// memorySegmentPath          = "user/memory-segment"
 	moneyHistoryPath           = "user/money-history"
 	respawnProhibitedRoomsPath = "user/respawn-prohibited-rooms"
@@ -59,6 +62,10 @@ const (
 	// World endpoints
 	worldStartRoomPath = "user/world-start-room"
 	worldStatusPath    = "user/world-status"
+
+	// Socket endpoints
+	// TODO(hinshun): no auth required
+	socketInfo = "socket/info"
 
 	// Query params
 	encodedKey      = "encoded"
