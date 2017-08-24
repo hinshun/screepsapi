@@ -41,6 +41,42 @@ const (
 	ColorWhite
 )
 
+type ConnectionResponse struct {
+	ID   int    `json:"id"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
+}
+
+type DocumentResponse struct {
+	Ok          int `json:"ok"`
+	N           int `json:"n"`
+	NumModified int `json:"nModified"`
+}
+
+type InsertResponse struct {
+	Ok            int                  `json:"ok"`
+	Result        InsertResultResponse `json:"result"`
+	Ops           []InsertOpsResponse  `json:"ops"`
+	InsertedCount int                  `json:"insertedCount"`
+	InsertedIDs   []string             `json:"insertedIDs"`
+}
+
+func (c *InsertResponse) IsOk() bool {
+	return c.Ok == 1
+}
+
+type InsertResultResponse struct {
+	Ok int `json:"ok"`
+	N  int `json:"n"`
+}
+
+type InsertOpsResponse struct {
+	ID         string `json:"_id"`
+	User       string `json:"user"`
+	Expression string `json:"expression"`
+	Hidden     bool   `json:"hidden"`
+}
+
 type MarketOrderResponse struct {
 	ID              string    `json:"_id"`
 	RoomName        string    `json:"roomName"`
@@ -48,6 +84,47 @@ type MarketOrderResponse struct {
 	Price           float32   `json:"price"`
 	Amount          int       `json:"amount"`
 	RemainingAmount int       `json:"remainingAmount"`
+}
+
+type MetaMessageResponse struct {
+	Parsed           bool                       `json:"parsed"`
+	Index            int                        `json:"index"`
+	HashedName       string                     `json:"hashedName"`
+	Length           int                        `json:"length"`
+	RequestID        int                        `json:"requestId"`
+	ResponseTo       int                        `json:"responseTo"`
+	ResponseFlags    int                        `json:"responseFlags"`
+	CursorID         string                     `json:"cursorId"`
+	CursorNotFound   bool                       `json:"cursorNotFound"`
+	QueryFailure     bool                       `json:"queryFailure"`
+	ShardConfigStale bool                       `json:"shardConfigStale"`
+	AwaitCapable     bool                       `json:"awaitCapable"`
+	PromoteLongs     bool                       `json:"promoteLongs"`
+	PromoteValues    bool                       `json:"promoteValues"`
+	PromoteBuffers   bool                       `json:"promoteBuffers"`
+	StartingFrom     int                        `json:"startingFrom"`
+	NumberReturned   int                        `json:"numberReturned"`
+	Raw              MetaMessageDataResponse    `json:"raw"`
+	Data             MetaMessageDataResponse    `json:"data"`
+	Options          MetaMessageOptionsResponse `json:"opts"`
+	Documents        []DocumentResponse         `json:"documents"`
+}
+
+type MetaMessageDataResponse struct {
+	Type MetaMessageDataType `json:"type"`
+	Data []int               `json:"data"`
+}
+
+type MetaMessageDataType string
+
+const (
+	MetaMessageDataTypeBuffer MetaMessageDataType = "Buffer"
+)
+
+type MetaMessageOptionsResponse struct {
+	PromoteLongs   bool `json:"promoteLongs"`
+	PromoteValues  bool `json:"promoteValues"`
+	PromoteBuffers bool `json:"promoteBuffers"`
 }
 
 type OrderType string
@@ -106,57 +183,4 @@ type UpsertResponse struct {
 
 func (c *UpsertResponse) IsOk() bool {
 	return c.Ok == 1
-}
-
-type DocumentResponse struct {
-	Ok          int `json:"ok"`
-	N           int `json:"n"`
-	NumModified int `json:"nModified"`
-}
-
-type ConnectionResponse struct {
-	ID   int    `json:"id"`
-	Host string `json:"host"`
-	Port int    `json:"port"`
-}
-
-type MetaMessageResponse struct {
-	Parsed           bool                       `json:"parsed"`
-	Index            int                        `json:"index"`
-	HashedName       string                     `json:"hashedName"`
-	Length           int                        `json:"length"`
-	RequestID        int                        `json:"requestId"`
-	ResponseTo       int                        `json:"responseTo"`
-	ResponseFlags    int                        `json:"responseFlags"`
-	CursorID         string                     `json:"cursorId"`
-	CursorNotFound   bool                       `json:"cursorNotFound"`
-	QueryFailure     bool                       `json:"queryFailure"`
-	ShardConfigStale bool                       `json:"shardConfigStale"`
-	AwaitCapable     bool                       `json:"awaitCapable"`
-	PromoteLongs     bool                       `json:"promoteLongs"`
-	PromoteValues    bool                       `json:"promoteValues"`
-	PromoteBuffers   bool                       `json:"promoteBuffers"`
-	StartingFrom     int                        `json:"startingFrom"`
-	NumberReturned   int                        `json:"numberReturned"`
-	Raw              MetaMessageDataResponse    `json:"raw"`
-	Data             MetaMessageDataResponse    `json:"data"`
-	Options          MetaMessageOptionsResponse `json:"opts"`
-	Documents        []DocumentResponse         `json:"documents"`
-}
-
-type MetaMessageDataResponse struct {
-	Type MetaMessageDataType `json:"type"`
-	Data []int               `json:"data"`
-}
-
-type MetaMessageDataType string
-
-const (
-	MetaMessageDataTypeBuffer MetaMessageDataType = "Buffer"
-)
-
-type MetaMessageOptionsResponse struct {
-	PromoteLongs   bool `json:"promoteLongs"`
-	PromoteValues  bool `json:"promoteValues"`
-	PromoteBuffers bool `json:"promoteBuffers"`
 }
