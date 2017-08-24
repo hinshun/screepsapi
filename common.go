@@ -42,6 +42,8 @@ const (
 )
 
 type TotalsResponse struct {
+	PowerProcessed     int `json:"powerProcessed"`
+	CreepsLost         int `json:"creepsLost"`
 	CreepsProduced     int `json:"creepsProduced"`
 	EnergyConstruction int `json:"energyConstruction"`
 	EnergyControl      int `json:"energyControl"`

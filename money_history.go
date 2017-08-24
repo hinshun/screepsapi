@@ -7,14 +7,14 @@ import (
 	"time"
 )
 
-type UserMoneyHistoryResponse struct {
-	Ok      int                      `json:"ok"`
-	Page    int                      `json:"page"`
-	HasMore bool                     `json:"hasMore"`
-	Orders  []UserMoneyOrderResponse `json:"messages"`
+type MoneyHistoryResponse struct {
+	Ok      int                  `json:"ok"`
+	Page    int                  `json:"page"`
+	HasMore bool                 `json:"hasMore"`
+	Orders  []MoneyOrderResponse `json:"messages"`
 }
 
-type UserMoneyOrderResponse struct {
+type MoneyOrderResponse struct {
 	ID      string          `json:"_id"`
 	Date    time.Time       `json:"date"`
 	Tick    bool            `json:"tick"`
@@ -65,16 +65,16 @@ type ChangeOrderPriceResponse struct {
 	NewPrice int    `json:"newPrice"`
 }
 
-func (u *UserMoneyHistoryResponse) IsOk() bool {
+func (u *MoneyHistoryResponse) IsOk() bool {
 	return u.Ok == 1
 }
 
-func (c *Client) UserMoneyHistory() (UserMoneyHistoryResponse, error) {
-	userMoneyHistoryResp := UserMoneyHistoryResponse{}
-	err := c.get(userMoneyHistoryPath, &userMoneyHistoryResp, nil, http.StatusOK)
+func (c *Client) MoneyHistory() (MoneyHistoryResponse, error) {
+	moneyHistoryResp := MoneyHistoryResponse{}
+	err := c.get(moneyHistoryPath, &moneyHistoryResp, nil, http.StatusOK)
 	if err != nil {
-		return userMoneyHistoryResp, fmt.Errorf("failed to get user messages list: %s", err)
+		return moneyHistoryResp, fmt.Errorf("failed to get money history: %s", err)
 	}
 
-	return userMoneyHistoryResp, nil
+	return moneyHistoryResp, nil
 }

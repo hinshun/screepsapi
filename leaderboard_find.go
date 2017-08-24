@@ -7,13 +7,13 @@ import (
 )
 
 type LeaderboardFindResponse struct {
-	LeaderboardRankResponse
+	RankResponse
 
-	Ok    int                       `json:"ok"`
-	Ranks []LeaderboardRankResponse `json:"list"`
+	Ok    int            `json:"ok"`
+	Ranks []RankResponse `json:"list"`
 }
 
-type LeaderboardRankResponse struct {
+type RankResponse struct {
 	ID     string `json:"_id"`
 	Season string `json:"season"`
 	User   string `json:"user"`

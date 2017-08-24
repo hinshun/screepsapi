@@ -8,10 +8,10 @@ import (
 )
 
 type LeaderboardListResponse struct {
-	Ok    int                       `json:"ok"`
-	Ranks []LeaderboardRankResponse `json:"list"`
-	Count int                       `json:"count"`
-	Users map[string]UserResponse   `json:"users"`
+	Ok    int                     `json:"ok"`
+	Ranks []RankResponse          `json:"list"`
+	Count int                     `json:"count"`
+	Users map[string]UserResponse `json:"users"`
 }
 
 func (l *LeaderboardListResponse) IsOk() bool {

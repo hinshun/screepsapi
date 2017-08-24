@@ -7,11 +7,11 @@ import (
 )
 
 type LeaderboardSeasonsResponse struct {
-	Ok      int                         `json:"ok"`
-	Seasons []LeaderboardSeasonResponse `json:"seasons"`
+	Ok      int              `json:"ok"`
+	Seasons []SeasonResponse `json:"seasons"`
 }
 
-type LeaderboardSeasonResponse struct {
+type SeasonResponse struct {
 	ID   string    `json:"_id"`
 	Name string    `json:"string"`
 	Date time.Time `json:"date"`

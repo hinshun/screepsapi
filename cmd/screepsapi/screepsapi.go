@@ -71,35 +71,41 @@ func test() error {
 	// }
 	// fmt.Printf("market/orders-index: %#v\n", marketOrdersIndex)
 
-	// userMessagesIndex, err := client.UserMessagesIndex()
+	// time, err := client.Time("shard1")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/index: %#v\n", userMessagesIndex)
+	// fmt.Printf("game/time: %#v\n", time)
 
-	// userMessagesList, err := client.UserMessagesList("59947fba7c2c8c7cccccfc41")
+	// messagesIndex, err := client.MessagesIndex()
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/list: %#v\n", userMessagesList)
+	// fmt.Printf("user/messages/index: %#v\n", messagesIndex)
 
-	// userMessagesSend, err := client.UserMessagesSend("59947fba7c2c8c7cccccfc41", "nvm")
+	// messagesList, err := client.MessagesList("59947fba7c2c8c7cccccfc41")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/send: %#v\n", userMessagesSend)
+	// fmt.Printf("user/messages/list: %#v\n", messagesList)
 
-	// userMessagesUnreadCount, err := client.UserMessagesUnreadCount()
+	// messagesSend, err := client.MessagesSend("59947fba7c2c8c7cccccfc41", "nvm")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/unread-count: %#v\n", userMessagesUnreadCount)
+	// fmt.Printf("user/messages/send: %#v\n", messagesSend)
 
-	// userConsole, err := client.UserConsole("shard1", "Game")
+	// messagesUnreadCount, err := client.MessagesUnreadCount()
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/send: %#v\n", userConsole)
+	// fmt.Printf("user/messages/unread-count: %#v\n", messagesUnreadCount)
+
+	// console, err := client.Console("shard1", "Game")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/messages/send: %#v\n", console)
 
 	// userFind, err := client.UserFind("", "hinshun")
 	// if err != nil {
@@ -107,36 +113,67 @@ func test() error {
 	// }
 	// fmt.Printf("user/find: %#v\n", userFind)
 
-	// userMemory, err := client.UserMemory("shard1", "flags")
+	// memory, err := client.Memory("shard1", "flags")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/memory: %#v\n", userMemory)
+	// fmt.Printf("user/memory: %#v\n", memory)
 
-	// userMemoryConsole, err := client.UpdateUserMemory("shard1", "flags", "test")
+	// memoryConsole, err := client.UpdateMemory("shard1", "flags", "test")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/memory: %#v\n", userMemoryConsole)
+	// fmt.Printf("user/memory: %#v\n", memoryConsole)
 
-	// userMemoryConsole, err := client.DeleteUserMemory("shard1", "flags")
+	// memoryConsole, err := client.DeleteMemory("shard1", "flags")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/memory: %#v\n", userMemoryConsole)
+	// fmt.Printf("user/memory: %#v\n", memoryConsole)
 
 	// TODO(hinshun): unconfirmed struct types
-	// userMoneyHistory, err := client.UserMoneyHistory()
+	// moneyHistory, err := client.MoneyHistory()
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/money-history: %#v\n", userMoneyHistory)
+	// fmt.Printf("user/money-history: %#v\n", moneyHistory)
 
 	// userOverview, err := client.UserOverview("", screepsapi.StatsPeriodNone)
 	// if err != nil {
 	// 	return err
 	// }
 	// fmt.Printf("user/overview: %#v\n", userOverview)
+
+	// respawnProhibitedRooms, err := client.RespawnProhibitedRooms()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/respawn-prohibited-rooms: %#v\n", respawnProhibitedRooms)
+
+	// TODO(hinshun): unconfirmed struct types and query params
+	// userRooms, err := client.UserRooms()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/rooms: %#v\n", userRooms)
+
+	// userStats, err := client.UserStats("561e4d4645f3f7244a7622e8", screepsapi.StatsPeriod7Days)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/stats: %#v\n", userStats)
+
+	// worldStartRoom, err := client.WorldStartRoom()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/world-start-room: %#v\n", worldStartRoom)
+
+	// worldStatus, err := client.WorldStatus()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/world-status: %#v\n", worldStatus)
 
 	return nil
 }
