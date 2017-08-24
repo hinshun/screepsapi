@@ -1,91 +1,141 @@
 package screepsapi
 
+type ActiveName string
+
 const (
-	// Endpoints
-	apiPath     = "api"
-	versionPath = "version"
+	ActiveNameWorld ActiveName = "activeWorld"
+	ActiveNameSim              = "activeSim"
+)
 
-	// Xsolla endpoints
-	xsollaUserPath = "xsolla/user"
+type Color int
 
-	// Auth endpoints
-	authMePath     = "auth/me"
-	authSigninPath = "auth/signin"
+const (
+	ColorNone Color = iota
+	ColorRed
+	ColorPurple
+	ColorBlue
+	ColorCyan
+	ColorGreen
+	ColorYellow
+	ColorOrange
+	ColorBrown
+	ColorGrey
+	ColorWhite
+)
 
-	// Leaderboard endpoints
-	leaderboardFindPath    = "leaderboard/find"
-	leaderboardListPath    = "leaderboard/list"
-	leaderboardSeasonsPath = "leaderboard/seasons"
+type Error string
 
-	// Game endpoints
-	addObjectIntentPath = "game/add-object-intent"
-	// createConstructionPath    = "game/create-construction"
-	createFlagPath = "game/create-flag"
-	removeFlagPath = "game/remove-flag"
-	// TODO(hinshun): invalid params
-	genUniqueObjectNamePath = "game/gen-unique-object-name"
-	mapStatsPath            = "game/map-stats"
-	// setNotifyWhenAttackedPath = "game/set-notify-when-attacked"
-	timePath = "game/time"
+const (
+	ErrorNone          Error = ""
+	ErrorInvalidParams       = "invalid params"
+	ErrorInvalidStatus       = "invalid status"
+)
 
-	// Market endpoints
-	marketMyOrdersPath    = "game/market/my-orders"
-	marketOrdersIndexPath = "game/market/orders-index"
-	marketOrdersPath      = "game/market/orders"
+type ObjectIntent string
 
-	// Messages endpoints
-	messagesIndexPath       = "user/messages/index"
-	messagesListPath        = "user/messages/list"
-	messagesSendPath        = "user/messages/send"
-	messagesUnreadCountPath = "user/messages/unread-count"
+const (
+	ObjectIntentRemove            ObjectIntent = "remove"
+	ObjectIntentSuicideCreep                   = "suicide"
+	ObjectIntentUnclaimController              = "unclaim"
+	ObjectIntentDestroyStructure               = "destroyStructure"
+)
 
-	// Room endpoints
-	roomOverviewPath = "game/room-overview"
-	roomStatusPath   = "game/room-status"
-	roomTerrainPath  = "game/room-terrain"
+type MarketOrderType string
 
-	// User endpoints
-	// activatePTRPath            = "user/activate-ptr"
-	branchesPath = "user/branches"
-	codePath     = "user/code"
-	consolePath  = "user/console"
-	memoryPath   = "user/memory"
-	// memorySegmentPath          = "user/memory-segment"
-	// TODO(hinshun): unconfirmed struct types
-	moneyHistoryPath           = "user/money-history"
-	respawnProhibitedRoomsPath = "user/respawn-prohibited-rooms"
-	setActiveBranchPath        = "user/set-active-branch"
-	userFindPath               = "user/find"
-	userOverviewPath           = "user/overview"
-	// TODO(hinshun): unconfirmed struct types and query params
-	userRoomsPath = "user/rooms"
-	userStatsPath = "user/stats"
+const (
+	MarketOrderTypeBuy  MarketOrderType = "buy"
+	MarketOrderTypeSell                 = "sell"
+)
 
-	// World endpoints
-	worldStartRoomPath = "user/world-start-room"
-	worldStatusPath    = "user/world-status"
+type MoneyOrderType string
 
-	// Socket endpoints
-	// TODO(hinshun): no auth required
-	socketInfo = "socket/info"
+const (
+	// TODO(hinshun): verify values
+	MoneyOrderTypeNew         MoneyOrderType = "new"
+	MoneyOrderTypeExtended                   = "extended"
+	MoneyOrderTypeFulfilled                  = "fulfilled"
+	MoneyOrderTypePriceChange                = "priceChange"
+)
 
-	// Query params
-	branchKey       = "branch"
-	encodedKey      = "encoded"
-	idKey           = "id"
-	intervalKey     = "interval"
-	limitKey        = "limit"
-	modeKey         = "mode"
-	offsetKey       = "offset"
-	pathKey         = "path"
-	resourceTypeKey = "resourceType"
-	respondentKey   = "respondent"
-	roomKey         = "room"
-	seasonKey       = "season"
-	shardKey        = "shard"
-	statNameKey     = "statName"
-	usernameKey     = "username"
+type RoomStatus string
 
-	// Query values
-	queryTrue = "true"
+const (
+	RoomStatusNormal       RoomStatus = "normal"
+	RoomStatusOutOfBorders            = "out of borders"
+)
+
+type StatName string
+
+const (
+	StatNameNone               StatName = ""
+	StatNameOwner                       = "owner0"
+	StatNameClaim                       = "claim0"
+	StatNameCreepsLost                  = "creepsLost"
+	StatNameCreepsProduced              = "creepsProduced"
+	StatNameEnergyConstruction          = "energyConstruction"
+	StatNameEnergyControl               = "energyControl"
+	StatNameEnergyCreeps                = "energyCreeps"
+	StatNameEnergyHarvested             = "energyHarvested"
+)
+
+type StatsPeriod string
+
+const (
+	StatsPeriodNone    StatsPeriod = ""
+	StatsPeriod1Hour               = "8"
+	StatsPeriod24Hours             = "180"
+	StatsPeriod7Days               = "1440"
+)
+
+type Structure string
+
+const (
+	StructureSpawn       Structure = "spawn"
+	StructureExtension             = "extension"
+	StructureRoad                  = "road"
+	StructureWall                  = "constructedWall"
+	StructureRampart               = "rampart"
+	StructureKeeper_lair           = "keeperLair"
+	StructurePortal                = "portal"
+	StructureController            = "controller"
+	StructureLink                  = "link"
+	StructureStorage               = "storage"
+	StructureTower                 = "tower"
+	StructureObserver              = "observer"
+	StructurePower_bank            = "powerBank"
+	StructurePower_spawn           = "powerSpawn"
+	StructureExtractor             = "extractor"
+	StructureLab                   = "lab"
+	StructureTerminal              = "terminal"
+	StructureContainer             = "container"
+	StructureNuker                 = "nuker"
+)
+
+type Terrain string
+
+const (
+	TerrainPlain    Terrain = "plain"
+	TerrainWall             = "wall"
+	TerrainSwamp            = "swamp"
+	TerrainAlsoWall         = "also wall"
+)
+
+type UpsertMessageDataType string
+
+const (
+	UpsertMessageDataTypeBuffer UpsertMessageDataType = "Buffer"
+)
+
+type UniqueObjectName string
+
+const (
+	UniqueObjectNameFlag  UniqueObjectName = "flag"
+	UniqueObjectNameSpawn                  = "spawn"
+)
+
+type WorldStatus string
+
+const (
+	WorldStatusEmpty  WorldStatus = "empty"
+	WorldStatusNormal             = "normal"
 )

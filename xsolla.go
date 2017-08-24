@@ -6,15 +6,6 @@ import (
 	"net/url"
 )
 
-type XsollaUserResponse struct {
-	Ok     int `json:"ok"`
-	Active int `json:"active"`
-}
-
-func (x *XsollaUserResponse) IsOk() bool {
-	return x.Ok == 1
-}
-
 func (c *Client) XsollaUser(shard string) (XsollaUserResponse, error) {
 	xsollaUserResp := XsollaUserResponse{}
 

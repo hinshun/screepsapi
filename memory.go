@@ -16,17 +16,8 @@ const (
 	memoryDataFormat = "gz"
 )
 
-type MemoryResponse struct {
-	Ok   int         `json:"ok"`
-	Data interface{} `json:"data"`
-}
-
-func (m *MemoryResponse) IsOk() bool {
-	return m.Ok == 1
-}
-
 type RawMemoryResponse struct {
-	Ok   int    `json:"ok"`
+	Response
 	Data string `json:"data"`
 }
 
@@ -87,12 +78,6 @@ func (c *Client) Memory(shard, path string) (MemoryResponse, error) {
 	}
 
 	return memoryResp, nil
-}
-
-type MemoryRequest struct {
-	Shard string  `json:"shard"`
-	Path  string  `json:"path"`
-	Value *string `json:"value,omitempty"`
 }
 
 func (c *Client) UpdateMemory(shard, path, value string) (InsertResponse, error) {

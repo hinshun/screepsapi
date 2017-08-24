@@ -83,6 +83,18 @@ func test() error {
 	// }
 	// fmt.Printf("market/orders: %#v\n", marketOrders)
 
+	// placeSpawn, err := client.PlaceSpawn(screepsapi.PlaceSpawnRequest{
+	// 	Shard:     "shard1",
+	// 	Room:      "E39N17",
+	// 	X:         27,
+	// 	Y:         24,
+	// 	Name: "Spawn1",
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/place-spawn: %#v\n", placeSpawn)
+
 	// removeFlag, err := client.RemoveFlag("shard1", "E7N35", "Flag1")
 	// if err != nil {
 	// 	return err
@@ -101,11 +113,23 @@ func test() error {
 	// }
 	// fmt.Printf("game/add-object-intent: %#v\n", suicideCreep)
 
-	// destroyStructure, err := client.DestroyStructure("shard1", "W38S12", "599bc57078ca755b8407aa4f", []string{"599e94219191fd5b55329022"})
+	// destroyStructure, err := client.DestroyStructure("shard1", "E39N17", "599bc57078ca755b8407aa4c", []string{"599eea6cc29e4d5b236775a8"})
 	// if err != nil {
 	// 	return err
 	// }
 	// fmt.Printf("game/add-object-intent: %#v\n", destroyStructure)
+
+	// createConstruction, err := client.CreateConstruction(screepsapi.CreateConstructionRequest{
+	// 	Shard:     "shard1",
+	// 	Room:      "E39N17",
+	// 	X:         27,
+	// 	Y:         24,
+	// 	Structure: screepsapi.StructureSpawn,
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/create-construction: %#v\n", createConstruction)
 
 	// createFlag, err := client.CreateFlag(screepsapi.CreateFlagRequest{
 	// 	Shard:          "shard1",
@@ -121,11 +145,17 @@ func test() error {
 	// }
 	// fmt.Printf("game/create-flag: %#v\n", createFlag)
 
-	// genUniqueObjectName, err := client.GenUniqueObjectName("shard1", screepsapi.GenTypeFlag)
+	// genUniqueObjectName, err := client.GenUniqueObjectName("shard1", screepsapi.UniqueObjectNameSpawn)
 	// if err != nil {
 	// 	return err
 	// }
 	// fmt.Printf("game/gen-unique-object-name: %#v\n", genUniqueObjectName)
+
+	// checkUniqueObjectName, err := client.CheckUniqueObjectName("shard1", "Spawn1", screepsapi.UniqueObjectNameSpawn)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/check-unique-object-name: %#v\n", checkUniqueObjectName)
 
 	// mapStats, err := client.MapStats("shard1", []string{"E7N35"}, screepsapi.StatNameEnergyHarvested, screepsapi.StatsPeriod1Hour)
 	// if err != nil {
@@ -224,6 +254,12 @@ func test() error {
 	// 	return err
 	// }
 	// fmt.Printf("user/overview: %#v\n", userOverview)
+
+	// respawn, err := client.Respawn()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/respawn: %#v\n", respawn)
 
 	// respawnProhibitedRooms, err := client.RespawnProhibitedRooms()
 	// if err != nil {

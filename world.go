@@ -5,20 +5,14 @@ import (
 	"net/http"
 )
 
-type WorldStatusResponse struct {
-	Ok     int         `json:"ok"`
-	Status WorldStatus `json:"status"`
-}
+func (c *Client) WorldStartRoom() (WorldStartRoomResponse, error) {
+	worldStartRoomResp := WorldStartRoomResponse{}
+	err := c.get(worldStartRoomPath, &worldStartRoomResp, nil, http.StatusOK)
+	if err != nil {
+		return worldStartRoomResp, fmt.Errorf("failed to get world start room: %s", err)
+	}
 
-type WorldStatus string
-
-const (
-	WorldStatusEmpty  WorldStatus = "empty"
-	WorldStatusNormal             = "normal"
-)
-
-func (w *WorldStatusResponse) IsOk() bool {
-	return w.Ok == 1
+	return worldStartRoomResp, nil
 }
 
 func (c *Client) WorldStatus() (WorldStatusResponse, error) {

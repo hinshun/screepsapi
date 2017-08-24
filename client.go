@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -46,7 +47,7 @@ func NewClient(credentials Credentials) (*Client, error) {
 		httpClient: httpClient,
 		serverURL:  serverURL,
 	}
-	err = client.Signin(credentials.Email, credentials.Password)
+	err = client.SignIn(credentials.Email, credentials.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
@@ -85,8 +86,8 @@ func (c *Client) get(path string, resp interface{}, values url.Values, statusCod
 		return fmt.Errorf("failed to unmarshal data: %s", err)
 	}
 
-	screepsResp, ok := resp.(ScreepsAPIResponse)
-	if !ok || !screepsResp.IsOk() {
+	apiResp, ok := resp.(APIResponse)
+	if !ok || !apiResp.IsOk() {
 		return fmt.Errorf("bad response")
 	}
 
@@ -94,19 +95,22 @@ func (c *Client) get(path string, resp interface{}, values url.Values, statusCod
 }
 
 func (c *Client) post(path string, req, resp interface{}, values url.Values, statusCode int) error {
-	reqJSON, err := json.Marshal(req)
-	if err != nil {
-		return fmt.Errorf("failed to marshal request: %s", err)
+	var body io.Reader
+	if req != nil {
+		reqJSON, err := json.Marshal(req)
+		if err != nil {
+			return fmt.Errorf("failed to marshal request: %s", err)
+		}
+		fmt.Printf("post: %s\n", reqJSON)
+		body = bytes.NewReader(reqJSON)
 	}
-	fmt.Printf("post: %s\n", reqJSON)
-
 	postURL, _ := url.Parse(c.serverURL.String())
 	postURL.Path = fmt.Sprintf("%s/%s", apiPath, path)
 	if values != nil {
 		postURL.RawQuery = values.Encode()
 	}
 
-	httpReq, err := http.NewRequest("POST", postURL.String(), bytes.NewReader(reqJSON))
+	httpReq, err := http.NewRequest("POST", postURL.String(), body)
 	if err != nil {
 		return fmt.Errorf("failed to create new POST request: %s", err)
 	}
@@ -133,8 +137,8 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 		return fmt.Errorf("failed to unmarshal data: %s", err)
 	}
 
-	screepsResp, ok := resp.(ScreepsAPIResponse)
-	if !ok || !screepsResp.IsOk() {
+	apiResp, ok := resp.(APIResponse)
+	if !ok || !apiResp.IsOk() {
 		return fmt.Errorf("bad response")
 	}
 
