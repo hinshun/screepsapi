@@ -17,6 +17,12 @@ func test() error {
 		return fmt.Errorf("failed to create screepsapi client: %s", err)
 	}
 
+	version, err := client.Version()
+	if err != nil {
+		return err
+	}
+	fmt.Printf("version: %#v\n", version)
+
 	// xsollaUser, err := client.XsollaUser("shard1")
 	// if err != nil {
 	// 	return err
