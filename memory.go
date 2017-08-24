@@ -95,33 +95,33 @@ type MemoryRequest struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (c *Client) UpdateMemory(shard, path, value string) (ConsoleResponse, error) {
+func (c *Client) UpdateMemory(shard, path, value string) (InsertResponse, error) {
 	memoryReq := MemoryRequest{
 		Shard: shard,
 		Path:  path,
 		Value: &value,
 	}
-	consoleResp := ConsoleResponse{}
+	insertResp := InsertResponse{}
 
-	err := c.post(memoryPath, &memoryReq, &consoleResp, nil, http.StatusOK)
+	err := c.post(memoryPath, &memoryReq, &insertResp, nil, http.StatusOK)
 	if err != nil {
-		return consoleResp, fmt.Errorf("failed to update memory: %s", err)
+		return insertResp, fmt.Errorf("failed to update memory: %s", err)
 	}
 
-	return consoleResp, nil
+	return insertResp, nil
 }
 
-func (c *Client) DeleteMemory(shard, path string) (ConsoleResponse, error) {
+func (c *Client) DeleteMemory(shard, path string) (InsertResponse, error) {
 	memoryReq := MemoryRequest{
 		Shard: shard,
 		Path:  path,
 	}
-	consoleResp := ConsoleResponse{}
+	insertResp := InsertResponse{}
 
-	err := c.post(memoryPath, &memoryReq, &consoleResp, nil, http.StatusOK)
+	err := c.post(memoryPath, &memoryReq, &insertResp, nil, http.StatusOK)
 	if err != nil {
-		return consoleResp, fmt.Errorf("failed to delete memory: %s", err)
+		return insertResp, fmt.Errorf("failed to delete memory: %s", err)
 	}
 
-	return consoleResp, nil
+	return insertResp, nil
 }

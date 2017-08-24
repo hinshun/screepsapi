@@ -77,11 +77,61 @@ func test() error {
 	// }
 	// fmt.Printf("market/orders-index: %#v\n", marketOrdersIndex)
 
-	marketOrders, err := client.MarketOrders("shard1", "Z")
-	if err != nil {
-		return err
-	}
-	fmt.Printf("market/orders: %#v\n", marketOrders)
+	// marketOrders, err := client.MarketOrders("shard1", "Z")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("market/orders: %#v\n", marketOrders)
+
+	// removeFlag, err := client.RemoveFlag("shard1", "E7N35", "Flag1")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/remove-flag: %#v\n", removeFlag)
+
+	// removeObject, err := client.RemoveObject("shard1", "E29N39", "599e8f01368c125b1639e407")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/add-object-intent: %#v\n", removeObject)
+
+	// suicideCreep, err := client.SuicideCreep("shard1", "E29N39", "599e92c84e56f12ea0b06109")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/add-object-intent: %#v\n", suicideCreep)
+
+	// destroyStructure, err := client.DestroyStructure("shard1", "W38S12", "599bc57078ca755b8407aa4f", []string{"599e94219191fd5b55329022"})
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/add-object-intent: %#v\n", destroyStructure)
+
+	// createFlag, err := client.CreateFlag(screepsapi.CreateFlagRequest{
+	// 	Shard:          "shard1",
+	// 	Room:           "E7N35",
+	// 	X:              19,
+	// 	Y:              37,
+	// 	Name:           "test",
+	// 	Color:          screepsapi.ColorWhite,
+	// 	SecondaryColor: screepsapi.ColorRed,
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/create-flag: %#v\n", createFlag)
+
+	// genUniqueObjectName, err := client.GenUniqueObjectName("shard1", screepsapi.GenTypeFlag)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/gen-unique-object-name: %#v\n", genUniqueObjectName)
+
+	// mapStats, err := client.MapStats("shard1", []string{"E7N35"}, screepsapi.StatNameEnergyHarvested, screepsapi.StatsPeriod1Hour)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("game/map-stats: %#v\n", mapStats)
 
 	// time, err := client.Time("shard1")
 	// if err != nil {
@@ -113,11 +163,31 @@ func test() error {
 	// }
 	// fmt.Printf("user/messages/unread-count: %#v\n", messagesUnreadCount)
 
-	// console, err := client.Console("shard1", "Game")
+	// branches, err := client.Branches()
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/messages/send: %#v\n", console)
+	// fmt.Printf("user/branches: %#v\n", branches)
+
+	// pushCode, err := client.PushCode("tutorial-1", map[string]string{
+	// 	"main": "hello world",
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/code: %#v\n", pushCode)
+
+	// pullCode, err := client.PullCode("")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/code: %#v\n", pullCode)
+
+	// insert, err := client.Console("shard1", "Game")
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/messages/send: %#v\n", insert)
 
 	// userFind, err := client.UserFind("", "hinshun")
 	// if err != nil {
@@ -131,26 +201,25 @@ func test() error {
 	// }
 	// fmt.Printf("user/memory: %#v\n", memory)
 
-	// memoryConsole, err := client.UpdateMemory("shard1", "flags", "test")
+	// memoryUpdate, err := client.UpdateMemory("shard1", "flags", "test")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/memory: %#v\n", memoryConsole)
+	// fmt.Printf("user/memory: %#v\n", memoryUpdate)
 
-	// memoryConsole, err := client.DeleteMemory("shard1", "flags")
+	// memoryDelete, err := client.DeleteMemory("shard1", "flags")
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("user/memory: %#v\n", memoryConsole)
+	// fmt.Printf("user/memory: %#v\n", memoryDelete)
 
-	// TODO(hinshun): unconfirmed struct types
 	// moneyHistory, err := client.MoneyHistory()
 	// if err != nil {
 	// 	return err
 	// }
 	// fmt.Printf("user/money-history: %#v\n", moneyHistory)
 
-	// userOverview, err := client.UserOverview("", screepsapi.StatsPeriodNone)
+	// userOverview, err := client.UserOverview(screepsapi.StatNameNone, screepsapi.StatsPeriodNone)
 	// if err != nil {
 	// 	return err
 	// }
@@ -162,7 +231,12 @@ func test() error {
 	// }
 	// fmt.Printf("user/respawn-prohibited-rooms: %#v\n", respawnProhibitedRooms)
 
-	// TODO(hinshun): unconfirmed struct types and query params
+	// setActiveBranch, err := client.SetActiveBranch("world", screepsapi.ActiveNameWorld)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("user/set-active-branch: %#v\n", setActiveBranch)
+
 	// userRooms, err := client.UserRooms()
 	// if err != nil {
 	// 	return err

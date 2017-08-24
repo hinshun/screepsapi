@@ -10,7 +10,7 @@ type ConsoleRequest struct {
 	Expression string `json:"expression"`
 }
 
-type ConsoleResponse struct {
+type InsertResponse struct {
 	Ok            int                   `json:"ok"`
 	Result        ConsoleResultResponse `json:"result"`
 	Ops           []ConsoleOpsResponse  `json:"ops"`
@@ -30,23 +30,23 @@ type ConsoleOpsResponse struct {
 	Hidden     bool   `json:"hidden"`
 }
 
-func (c *ConsoleResponse) IsOk() bool {
+func (c *InsertResponse) IsOk() bool {
 	return c.Ok == 1
 }
 
-func (c *Client) Console(shard, expression string) (ConsoleResponse, error) {
+func (c *Client) Console(shard, expression string) (InsertResponse, error) {
 	consoleReq := ConsoleRequest{
 		Expression: expression,
 	}
-	consoleResp := ConsoleResponse{}
+	insertResp := InsertResponse{}
 
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.post(consolePath, &consoleReq, &consoleResp, values, http.StatusOK)
+	err := c.post(consolePath, &consoleReq, &insertResp, values, http.StatusOK)
 	if err != nil {
-		return consoleResp, fmt.Errorf("failed to post user console: %s", err)
+		return insertResp, fmt.Errorf("failed to post user console: %s", err)
 	}
 
-	return consoleResp, nil
+	return insertResp, nil
 }

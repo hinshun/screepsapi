@@ -25,6 +25,22 @@ type BadgeTypePathResponse struct {
 type BadgeColorHexResponse string
 type BadgeColor256Response int
 
+type Color int
+
+const (
+	ColorNone Color = iota
+	ColorRed
+	ColorPurple
+	ColorBlue
+	ColorCyan
+	ColorGreen
+	ColorYellow
+	ColorOrange
+	ColorBrown
+	ColorGrey
+	ColorWhite
+)
+
 type MarketOrderResponse struct {
 	ID              string    `json:"_id"`
 	RoomName        string    `json:"roomName"`
@@ -39,6 +55,20 @@ type OrderType string
 const (
 	OrderTypeBuy  OrderType = "buy"
 	OrderTypeSell           = "sell"
+)
+
+type StatName string
+
+const (
+	StatNameNone               StatName = ""
+	StatNameOwner                       = "owner0"
+	StatNameClaim                       = "claim0"
+	StatNameCreepsLost                  = "creepsLost"
+	StatNameCreepsProduced              = "creepsProduced"
+	StatNameEnergyConstruction          = "energyConstruction"
+	StatNameEnergyControl               = "energyControl"
+	StatNameEnergyCreeps                = "energyCreeps"
+	StatNameEnergyHarvested             = "energyHarvested"
 )
 
 type StatsPeriod string
@@ -65,4 +95,68 @@ type UserResponse struct {
 	Username string        `json:"username"`
 	Badge    BadgeResponse `json:"badge"`
 	GCL      int           `json:"gcl"`
+}
+
+type UpsertResponse struct {
+	Ok         int                 `json:"ok"`
+	Result     DocumentResponse    `json:"result"`
+	Connection ConnectionResponse  `json:"connection"`
+	Message    MetaMessageResponse `json:"message"`
+}
+
+func (c *UpsertResponse) IsOk() bool {
+	return c.Ok == 1
+}
+
+type DocumentResponse struct {
+	Ok          int `json:"ok"`
+	N           int `json:"n"`
+	NumModified int `json:"nModified"`
+}
+
+type ConnectionResponse struct {
+	ID   int    `json:"id"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
+}
+
+type MetaMessageResponse struct {
+	Parsed           bool                       `json:"parsed"`
+	Index            int                        `json:"index"`
+	HashedName       string                     `json:"hashedName"`
+	Length           int                        `json:"length"`
+	RequestID        int                        `json:"requestId"`
+	ResponseTo       int                        `json:"responseTo"`
+	ResponseFlags    int                        `json:"responseFlags"`
+	CursorID         string                     `json:"cursorId"`
+	CursorNotFound   bool                       `json:"cursorNotFound"`
+	QueryFailure     bool                       `json:"queryFailure"`
+	ShardConfigStale bool                       `json:"shardConfigStale"`
+	AwaitCapable     bool                       `json:"awaitCapable"`
+	PromoteLongs     bool                       `json:"promoteLongs"`
+	PromoteValues    bool                       `json:"promoteValues"`
+	PromoteBuffers   bool                       `json:"promoteBuffers"`
+	StartingFrom     int                        `json:"startingFrom"`
+	NumberReturned   int                        `json:"numberReturned"`
+	Raw              MetaMessageDataResponse    `json:"raw"`
+	Data             MetaMessageDataResponse    `json:"data"`
+	Options          MetaMessageOptionsResponse `json:"opts"`
+	Documents        []DocumentResponse         `json:"documents"`
+}
+
+type MetaMessageDataResponse struct {
+	Type MetaMessageDataType `json:"type"`
+	Data []int               `json:"data"`
+}
+
+type MetaMessageDataType string
+
+const (
+	MetaMessageDataTypeBuffer MetaMessageDataType = "Buffer"
+)
+
+type MetaMessageOptionsResponse struct {
+	PromoteLongs   bool `json:"promoteLongs"`
+	PromoteValues  bool `json:"promoteValues"`
+	PromoteBuffers bool `json:"promoteBuffers"`
 }

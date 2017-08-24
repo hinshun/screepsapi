@@ -3,8 +3,6 @@ package screepsapi
 import (
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 )
 
 type BranchesResponse struct {

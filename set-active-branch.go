@@ -3,7 +3,6 @@ package screepsapi
 import (
 	"fmt"
 	"net/http"
-	"net/url"
 )
 
 type SetActiveBranchRequest struct {

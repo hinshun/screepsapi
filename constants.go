@@ -18,13 +18,13 @@ const (
 	leaderboardSeasonsPath = "leaderboard/seasons"
 
 	// Game endpoints
-	// addObjectIntentPath       = "game/add-object-intent"
-	// changeFlagColorPath       = "game/change-flag-color"
-	// changeFlagPath            = "game/change-flag"
+	addObjectIntentPath = "game/add-object-intent"
 	// createConstructionPath    = "game/create-construction"
-	// createFlagPath            = "game/create-flag"
-	// genUniqueObjectNamePath   = "game/gen-unique-object-name"
-	// mapStatsPath              = "game/map-stats"
+	createFlagPath = "game/create-flag"
+	removeFlagPath = "game/remove-flag"
+	// TODO(hinshun): invalid params
+	genUniqueObjectNamePath = "game/gen-unique-object-name"
+	mapStatsPath            = "game/map-stats"
 	// setNotifyWhenAttackedPath = "game/set-notify-when-attacked"
 	timePath = "game/time"
 
@@ -46,18 +46,20 @@ const (
 
 	// User endpoints
 	// activatePTRPath            = "user/activate-ptr"
-	codePath            = "user/code"
-	branchesPath        = "user/branches"
-	setActiveBranchPath = "user/set-active-branch"
-	consolePath         = "user/console"
-	memoryPath          = "user/memory"
+	branchesPath = "user/branches"
+	codePath     = "user/code"
+	consolePath  = "user/console"
+	memoryPath   = "user/memory"
 	// memorySegmentPath          = "user/memory-segment"
+	// TODO(hinshun): unconfirmed struct types
 	moneyHistoryPath           = "user/money-history"
 	respawnProhibitedRoomsPath = "user/respawn-prohibited-rooms"
+	setActiveBranchPath        = "user/set-active-branch"
 	userFindPath               = "user/find"
 	userOverviewPath           = "user/overview"
-	userRoomsPath              = "user/rooms"
-	userStatsPath              = "user/stats"
+	// TODO(hinshun): unconfirmed struct types and query params
+	userRoomsPath = "user/rooms"
+	userStatsPath = "user/stats"
 
 	// World endpoints
 	worldStartRoomPath = "user/world-start-room"
@@ -68,6 +70,7 @@ const (
 	socketInfo = "socket/info"
 
 	// Query params
+	branchKey       = "branch"
 	encodedKey      = "encoded"
 	idKey           = "id"
 	intervalKey     = "interval"

@@ -20,7 +20,9 @@ func (c *Client) PullCode(branch string) (PullCodeResponse, error) {
 	pullCodeResp := PullCodeResponse{}
 
 	values := make(url.Values)
-	values.Add(branchKey, branch)
+	if branch != "" {
+		values.Add(branchKey, branch)
+	}
 
 	err := c.get(codePath, &pullCodeResp, values, http.StatusOK)
 	if err != nil {
@@ -31,44 +33,28 @@ func (c *Client) PullCode(branch string) (PullCodeResponse, error) {
 }
 
 type PushCodeRequest struct {
-	Branch  string            `json:"branch"`
+	Branch  string            `json:"branch,omitempty"`
 	Modules map[string]string `json:"modules"`
 }
 
 type PushCodeResponse struct {
-	Ok            int                    `json:"ok"`
-	Result        PushCodeResultResponse `json:"result"`
-	Ops           []PushCodeOpsResponse  `json:"ops"`
-	InsertedCount int                    `json:"insertedCount"`
-	InsertedIDs   []string               `json:"insertedIDs"`
-}
-
-type PushCodeResultResponse struct {
-	Ok int `json:"ok"`
-	N  int `json:"n"`
-}
-
-type PushCodeOpsResponse struct {
-	ID         string `json:"_id"`
-	User       string `json:"user"`
-	Expression string `json:"expression"`
-	Hidden     bool   `json:"hidden"`
+	Ok        int `json:"ok"`
+	Timestamp int `json:"timestamp"`
+	Hash      int `json:"_hash"`
 }
 
 func (c *PushCodeResponse) IsOk() bool {
 	return c.Ok == 1
 }
 
-func (c *Client) PushCode(shard, expression string) (PushCodeResponse, error) {
+func (c *Client) PushCode(branch string, modules map[string]string) (PushCodeResponse, error) {
 	pushCodeReq := PushCodeRequest{
-		Expression: expression,
+		Branch:  branch,
+		Modules: modules,
 	}
 	pushCodeResp := PushCodeResponse{}
 
-	values := make(url.Values)
-	values.Add(shardKey, shard)
-
-	err := c.post(codePath, &pushCodeReq, &pushCodeResp, values, http.StatusOK)
+	err := c.post(codePath, &pushCodeReq, &pushCodeResp, nil, http.StatusOK)
 	if err != nil {
 		return pushCodeResp, fmt.Errorf("failed to push code: %s", err)
 	}

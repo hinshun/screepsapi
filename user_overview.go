@@ -22,15 +22,15 @@ func (u *UserOverviewResponse) IsOk() bool {
 	return u.Ok == 1
 }
 
-func (c *Client) UserOverview(statName string, statsPeriod StatsPeriod) (UserOverviewResponse, error) {
+func (c *Client) UserOverview(statName StatName, statsPeriod StatsPeriod) (UserOverviewResponse, error) {
 	userOverviewResp := UserOverviewResponse{}
 
 	values := make(url.Values)
 	if statsPeriod != StatsPeriodNone {
 		values.Add(intervalKey, string(statsPeriod))
 	}
-	if statName != "" {
-		values.Add(statNameKey, statName)
+	if statName != StatNameNone {
+		values.Add(statNameKey, string(statName))
 	}
 
 	err := c.get(userOverviewPath, &userOverviewResp, values, http.StatusOK)
