@@ -46,12 +46,14 @@ const (
 	roomTerrainPath  = "game/room-terrain"
 
 	// User endpoints
-	// activatePTRPath            = "user/activate-ptr"
-	branchesPath = "user/branches"
-	codePath     = "user/code"
-	consolePath  = "user/console"
-	memoryPath   = "user/memory"
-	// memorySegmentPath          = "user/memory-segment"
+	// TODO(hinshun): unimplemented
+	activatePTRPath = "user/activate-ptr"
+	branchesPath    = "user/branches"
+	codePath        = "user/code"
+	consolePath     = "user/console"
+	memoryPath      = "user/memory"
+	// TODO(hinshun): unimplemented
+	memorySegmentPath = "user/memory-segment"
 	// TODO(hinshun): unconfirmed struct types
 	moneyHistoryPath           = "user/money-history"
 	respawnPath                = "user/respawn"
@@ -68,7 +70,7 @@ const (
 	worldStatusPath    = "user/world-status"
 
 	// Socket endpoints
-	// TODO(hinshun): no auth required
+	// TODO(hinshun): unimplemented, note: no auth required
 	socketInfo = "socket/info"
 
 	// Query params
