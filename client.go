@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/hinshun/screepsapi/screepsws"
 )
 
 const (
@@ -22,6 +24,7 @@ var (
 )
 
 type Client struct {
+	WebSocket  *screepsws.WebSocket
 	httpClient *http.Client
 	serverURL  *url.URL
 	token      string
@@ -51,6 +54,7 @@ func NewClient(credentials Credentials) (*Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
+	client.WebSocket = screepsws.NewWebSocket(client.serverURL, client.token)
 
 	return client, nil
 }
