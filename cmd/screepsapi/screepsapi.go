@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"github.com/hinshun/screepsapi"
 )
@@ -33,11 +34,35 @@ func test() error {
 		return fmt.Errorf("failed to create screepsapi client: %s", err)
 	}
 
-	version, err := client.Version()
+	// version, err := client.Version()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("version: %#v\n", version)
+
+	err = client.WebSocket.Connect()
 	if err != nil {
 		return err
 	}
-	fmt.Printf("version: %#v\n", version)
+
+	cpuChan, err := client.WebSocket.SubscribeCPU("599bc57078ca755b8407aa4f")
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		for {
+			cpuData := <-cpuChan
+			fmt.Printf("cpu-data: %#v\n", cpuData)
+		}
+	}()
+
+	time.Sleep(10 * time.Second)
+
+	err = client.WebSocket.Close()
+	if err != nil {
+		return err
+	}
 
 	// xsollaUser, err := client.XsollaUser("shard1")
 	// if err != nil {
