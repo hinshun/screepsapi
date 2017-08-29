@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
-func (c *Client) MapStats(shard string, rooms []string, statName StatName, statsPeriod StatsPeriod) (MapStatsResponse, error) {
+func (c *Client) MapStats(shard string, rooms []string, statName screepstype.StatName, statsPeriod screepstype.StatsPeriod) (MapStatsResponse, error) {
 	mapStatsReq := MapStatsRequest{
 		Shard:    shard,
 		Rooms:    rooms,
-		StatName: StatName(fmt.Sprintf("%s%s", statName, statsPeriod)),
+		StatName: screepstype.StatName(fmt.Sprintf("%s%s", statName, statsPeriod)),
 	}
 	mapStatsResp := MapStatsResponse{}
 

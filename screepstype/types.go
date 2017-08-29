@@ -1,9 +1,30 @@
-package screepsapi
+package screepstype
 
 import (
 	"encoding/json"
 	"time"
 )
+
+type Badge struct {
+	// Type is either a BadgePreset or a BadgePath describing a custom
+	// badge vector.
+	Type json.RawMessage `json:"type"`
+
+	// Color1 is the first color of the badge. Colors can be either all
+	// unmarshalled into ColorHex or Color256.
+	Color1 json.RawMessage `json:"color1"`
+
+	// Color2 is the secondary color of the badge. Colors can be either all
+	// unmarshalled into ColorHex or Color256.
+	Color2 json.RawMessage `json:"color2"`
+
+	// Color3 is the tertiary color of the badge. Colors can be either all
+	// unmarshalled into ColorHex or Color256.
+	Color3 json.RawMessage `json:"color3"`
+
+	Param int  `json:"param"`
+	Flip  bool `json:"flip"`
+}
 
 type BadgePreset int
 
@@ -32,6 +53,11 @@ type Connection struct {
 	ID   int    `json:"id"`
 	Host string `json:"host"`
 	Port int    `json:"port"`
+}
+
+type ConsoleMessage struct {
+	Log     []string `json:"log"`
+	Results []string `json:"results"`
 }
 
 type Document struct {
@@ -142,6 +168,25 @@ type Message struct {
 	Unread bool   `json:"unread"`
 }
 
+type MessageRead struct {
+	Message MessageReadUpdate `json:"message"`
+}
+
+type MessageReadUpdate struct {
+	ID     string `json:"_id"`
+	Unread bool   `json:"unread"`
+}
+
+type MessageUpdate struct {
+	ID         string           `json:"_id"`
+	OutMessage string           `json:"outMessage"`
+	Text       string           `json:"text"`
+	Direction  MessageDirection `json:"type"`
+	Unread     bool             `json:"unread"`
+	User       string           `json:"user"`
+	Respondent string           `json:"respondent"`
+}
+
 type MessageWithRecipients struct {
 	Message
 	User       string `json:"user"`
@@ -174,6 +219,10 @@ type MoneyOrder struct {
 	RoomName     string `json:"roomName"`
 }
 
+type NewMessage struct {
+	Message MessageUpdate `json:"message"`
+}
+
 type NewOrder struct {
 	Order MoneyOrder `json:"order"`
 }
@@ -193,9 +242,13 @@ type Room struct {
 	Novice int        `json:"novice"`
 }
 
+type RoomInfo struct {
+	Mode string `json:"mode"`
+}
+
 type RoomOwner struct {
-	Username string        `json:"username"`
-	Badge    BadgeResponse `json:"badge"`
+	Username string `json:"username"`
+	Badge    Badge  `json:"badge"`
 }
 
 type RoomStats struct {
@@ -325,8 +378,8 @@ type UpsertMessageOptions struct {
 }
 
 type User struct {
-	ID       string        `json:"_id"`
-	Username string        `json:"username"`
-	Badge    BadgeResponse `json:"badge"`
-	GCL      int           `json:"gcl"`
+	ID       string `json:"_id"`
+	Username string `json:"username"`
+	Badge    Badge  `json:"badge"`
+	GCL      int    `json:"gcl"`
 }

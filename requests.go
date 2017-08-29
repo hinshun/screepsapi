@@ -1,17 +1,19 @@
 package screepsapi
 
+import "github.com/hinshun/screepsapi/screepstype"
+
 type AddObjectIntentRequest struct {
-	Shard  string       `json:"shard"`
-	Room   string       `json:"room"`
-	ID     string       `json:"_id"`
-	Name   ObjectIntent `json:"name"`
-	Intent interface{}  `json:"intent"`
+	Shard  string                   `json:"shard"`
+	Room   string                   `json:"room"`
+	ID     string                   `json:"_id"`
+	Name   screepstype.ObjectIntent `json:"name"`
+	Intent interface{}              `json:"intent"`
 }
 
 type CheckUniqueObjectNameRequest struct {
-	Shard string           `json:"shard"`
-	Type  UniqueObjectName `json:"type"`
-	Name  string           `json:"name"`
+	Shard string                       `json:"shard"`
+	Type  screepstype.UniqueObjectName `json:"type"`
+	Name  string                       `json:"name"`
 }
 
 type ConsoleRequest struct {
@@ -19,21 +21,21 @@ type ConsoleRequest struct {
 }
 
 type CreateFlagRequest struct {
-	Shard          string `json:"shard"`
-	Room           string `json:"room"`
-	X              int    `json:"x"`
-	Y              int    `json:"y"`
-	Name           string `json:"name"`
-	Color          Color  `json:"color"`
-	SecondaryColor Color  `json:"secondaryColor"`
+	Shard          string            `json:"shard"`
+	Room           string            `json:"room"`
+	X              int               `json:"x"`
+	Y              int               `json:"y"`
+	Name           string            `json:"name"`
+	Color          screepstype.Color `json:"color"`
+	SecondaryColor screepstype.Color `json:"secondaryColor"`
 }
 
 type CreateConstructionRequest struct {
-	Shard     string    `json:"shard"`
-	Room      string    `json:"room"`
-	X         int       `json:"x"`
-	Y         int       `json:"y"`
-	Structure Structure `json:"type"`
+	Shard     string                `json:"shard"`
+	Room      string                `json:"room"`
+	X         int                   `json:"x"`
+	Y         int                   `json:"y"`
+	Structure screepstype.Structure `json:"type"`
 }
 
 type DestroyStructureIntentRequest struct {
@@ -43,14 +45,14 @@ type DestroyStructureIntentRequest struct {
 }
 
 type GenUniqueObjectNameRequest struct {
-	Shard string           `json:"shard"`
-	Type  UniqueObjectName `json:"type"`
+	Shard string                       `json:"shard"`
+	Type  screepstype.UniqueObjectName `json:"type"`
 }
 
 type MapStatsRequest struct {
-	Shard    string   `json:"shard"`
-	Rooms    []string `json:"rooms"`
-	StatName StatName `json:"statName"`
+	Shard    string               `json:"shard"`
+	Rooms    []string             `json:"rooms"`
+	StatName screepstype.StatName `json:"statName"`
 }
 
 type MemoryRequest struct {
@@ -84,8 +86,8 @@ type RemoveFlagRequest struct {
 }
 
 type SetActiveBranchRequest struct {
-	ActiveName ActiveName `json:"activeName"`
-	Branch     string     `json:"branch"`
+	ActiveName screepstype.ActiveName `json:"activeName"`
+	Branch     string                 `json:"branch"`
 }
 
 type SignInRequest struct {

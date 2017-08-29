@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 func (c *Client) AddObjectIntent(addObjectIntentReq AddObjectIntentRequest) (UpsertResponse, error) {
@@ -16,7 +18,7 @@ func (c *Client) AddObjectIntent(addObjectIntentReq AddObjectIntentRequest) (Ups
 	return upsertResp, nil
 }
 
-func (c *Client) CheckUniqueObjectName(shard, name string, uniqueObjectNameType UniqueObjectName) (Response, error) {
+func (c *Client) CheckUniqueObjectName(shard, name string, uniqueObjectNameType screepstype.UniqueObjectName) (Response, error) {
 	checkUniqueObjectNameReq := CheckUniqueObjectNameRequest{
 		Shard: shard,
 		Type:  uniqueObjectNameType,
@@ -66,12 +68,12 @@ func (c *Client) DestroyStructure(shard, room, user string, ids []string) (Upser
 		Shard:  shard,
 		Room:   room,
 		ID:     "room",
-		Name:   ObjectIntentDestroyStructure,
+		Name:   screepstype.ObjectIntentDestroyStructure,
 		Intent: intents,
 	})
 }
 
-func (c *Client) GenUniqueObjectName(shard string, uniqueObjectNameType UniqueObjectName) (GenUniqueObjectNameResponse, error) {
+func (c *Client) GenUniqueObjectName(shard string, uniqueObjectNameType screepstype.UniqueObjectName) (GenUniqueObjectNameResponse, error) {
 	genUniqueObjectNameReq := GenUniqueObjectNameRequest{
 		Shard: shard,
 		Type:  uniqueObjectNameType,
@@ -117,7 +119,7 @@ func (c *Client) RemoveObject(shard, room, id string) (UpsertResponse, error) {
 		Shard:  shard,
 		Room:   room,
 		ID:     id,
-		Name:   ObjectIntentRemove,
+		Name:   screepstype.ObjectIntentRemove,
 		Intent: struct{}{},
 	})
 }
@@ -147,7 +149,7 @@ func (c *Client) SuicideCreep(shard, room, id string) (UpsertResponse, error) {
 		Shard:  shard,
 		Room:   room,
 		ID:     id,
-		Name:   ObjectIntentSuicideCreep,
+		Name:   screepstype.ObjectIntentSuicideCreep,
 		Intent: struct{}{},
 	})
 }
@@ -171,7 +173,7 @@ func (c *Client) UnclaimController(shard, room, id string) (UpsertResponse, erro
 		Shard:  shard,
 		Room:   room,
 		ID:     id,
-		Name:   ObjectIntentUnclaimController,
+		Name:   screepstype.ObjectIntentUnclaimController,
 		Intent: struct{}{},
 	})
 }

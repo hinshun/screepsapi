@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 func (c *Client) UserFind(id, username string) (UserFindResponse, error) {
@@ -25,14 +27,14 @@ func (c *Client) UserFind(id, username string) (UserFindResponse, error) {
 	return userFindResp, nil
 }
 
-func (c *Client) UserOverview(statName StatName, statsPeriod StatsPeriod) (UserOverviewResponse, error) {
+func (c *Client) UserOverview(statName screepstype.StatName, statsPeriod screepstype.StatsPeriod) (UserOverviewResponse, error) {
 	userOverviewResp := UserOverviewResponse{}
 
 	values := make(url.Values)
-	if statsPeriod != StatsPeriodNone {
+	if statsPeriod != screepstype.StatsPeriodNone {
 		values.Add(intervalKey, string(statsPeriod))
 	}
-	if statName != StatNameNone {
+	if statName != screepstype.StatNameNone {
 		values.Add(statNameKey, string(statName))
 	}
 
@@ -54,7 +56,7 @@ func (c *Client) UserRooms() (UserRoomsResponse, error) {
 	return userRoomsResp, nil
 }
 
-func (c *Client) UserStats(id string, statsPeriod StatsPeriod) (UserStatsResponse, error) {
+func (c *Client) UserStats(id string, statsPeriod screepstype.StatsPeriod) (UserStatsResponse, error) {
 	userStatsResp := UserStatsResponse{}
 
 	values := make(url.Values)

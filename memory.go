@@ -1,20 +1,13 @@
 package screepsapi
 
 import (
-	"bytes"
-	"compress/gzip"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
-)
 
-const (
-	memoryDataFormat = "gz"
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 type RawMemoryResponse struct {
@@ -29,36 +22,20 @@ func (m *MemoryResponse) UnmarshalJSON(b []byte) error {
 	rawMemoryResp := RawMemoryResponse{}
 	err := json.Unmarshal(b, &rawMemoryResp)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to unmarshal raw response: %s", err)
 	}
 
 	m.Ok = rawMemoryResp.Ok
+	if rawMemoryResp.Data != "" {
+		unzippedData, err := screepstype.Unzip(rawMemoryResp.Data)
+		if err != nil {
+			return fmt.Errorf("failed to unzip gzipped data: %s", err)
+		}
 
-	dataParts := strings.Split(rawMemoryResp.Data, fmt.Sprintf("%s:", memoryDataFormat))
-	if len(dataParts) != 2 && dataParts[0] != memoryDataFormat {
-		return fmt.Errorf("data not in format %s: %s", memoryDataFormat, rawMemoryResp.Data)
-	}
-	rawData := dataParts[1]
-
-	decodedData, err := base64.StdEncoding.DecodeString(rawData)
-	if err != nil {
-		return fmt.Errorf("failed to base64 decode data: %s", rawMemoryResp.Data)
-	}
-
-	gzipReader, err := gzip.NewReader(bytes.NewReader(decodedData))
-	if err != nil {
-		return fmt.Errorf("failed to create gzip reader over data: %s", rawMemoryResp.Data)
-	}
-	defer gzipReader.Close()
-
-	unzippedData, err := ioutil.ReadAll(gzipReader)
-	if err != nil {
-		return fmt.Errorf("failed to read gzip data: %s", rawMemoryResp.Data)
-	}
-
-	err = json.Unmarshal(unzippedData, &m.Data)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal unzipped data: %s", unzippedData)
+		err = json.Unmarshal(unzippedData, &m.Data)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshal unzipped data: %s", unzippedData)
+		}
 	}
 
 	return nil

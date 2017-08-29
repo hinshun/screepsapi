@@ -1,4 +1,4 @@
-package screepsapi
+package screepstype
 
 type ActiveName string
 
@@ -45,6 +45,13 @@ type MarketOrderType string
 const (
 	MarketOrderTypeBuy  MarketOrderType = "buy"
 	MarketOrderTypeSell                 = "sell"
+)
+
+type MessageDirection string
+
+const (
+	MessageDirectionIn  MessageDirection = "in"
+	MessageDirectionOut                  = "out"
 )
 
 type MoneyOrderType string

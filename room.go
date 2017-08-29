@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
-func (c *Client) RoomOverview(shard, room string, statsPeriod StatsPeriod) (RoomOverviewResponse, error) {
+func (c *Client) RoomOverview(shard, room string, statsPeriod screepstype.StatsPeriod) (RoomOverviewResponse, error) {
 	roomOverviewResp := RoomOverviewResponse{}
 
 	values := make(url.Values)

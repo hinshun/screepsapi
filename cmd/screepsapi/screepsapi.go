@@ -45,19 +45,29 @@ func test() error {
 		return err
 	}
 
-	cpuChan, err := client.WebSocket.SubscribeCPU("599bc57078ca755b8407aa4f")
+	roomChan, err := client.WebSocket.SubscribeRoom("shard1", "E8N35")
 	if err != nil {
 		return err
 	}
 
 	go func() {
 		for {
-			cpuData := <-cpuChan
-			fmt.Printf("cpu-data: %#v\n", cpuData)
+			roomData := <-roomChan
+			fmt.Printf("room-data: %#\n", roomData)
 		}
 	}()
 
 	time.Sleep(10 * time.Second)
+
+	err = client.WebSocket.UnsubscribeRoom("shard1", "E8N35")
+	if err != nil {
+		return err
+	}
+
+	// err = client.WebSocket.Send("unsubscribe room:shard1/E8N35")
+	// if err != nil {
+	// 	return fmt.Errorf("failed to unsubscribe: %s", err)
+	// }
 
 	err = client.WebSocket.Close()
 	if err != nil {
@@ -272,7 +282,7 @@ func test() error {
 	// }
 	// fmt.Printf("user/find: %#v\n", userFind)
 
-	// memory, err := client.Memory("shard1", "flags")
+	// memory, err := client.Memory("shard1", "")
 	// if err != nil {
 	// 	return err
 	// }

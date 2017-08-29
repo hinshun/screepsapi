@@ -7,7 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	"golang.org/x/net/websocket"
+	"github.com/hinshun/screepsapi/screepstype"
+
+	"github.com/gorilla/websocket"
 )
 
 type WebSocket struct {
@@ -25,6 +27,7 @@ func NewWebSocket(serverURL *url.URL, token string) *WebSocket {
 	return &WebSocket{
 		serverURL:     serverURL,
 		token:         token,
+		interrupt:     make(chan struct{}),
 		subscriptions: make(map[string]chan []byte),
 	}
 }
@@ -38,12 +41,7 @@ func (ws *WebSocket) Connect() error {
 	websocketURL.Scheme = strings.Replace(websocketURL.Scheme, "http", "ws", 1)
 	websocketURL.Path = socketPath
 
-	config, err := websocket.NewConfig(websocketURL.String(), websocketURL.String())
-	if err != nil {
-		return fmt.Errorf("failed to create new websocket config: %s", err)
-	}
-
-	conn, err := websocket.DialConfig(config)
+	conn, _, err := websocket.DefaultDialer.Dial(websocketURL.String(), nil)
 	if err != nil {
 		return fmt.Errorf("failed to create websocket connection: %s", err)
 	}
@@ -70,6 +68,7 @@ func (ws *WebSocket) Close() error {
 	}
 
 	close(ws.interrupt)
+	ws.interrupt = make(chan struct{})
 	ws.authLock.Lock()
 	ws.authenticated = false
 	ws.sendQueue = ws.sendQueue[:0]
@@ -93,26 +92,31 @@ func (ws *WebSocket) Send(data string) error {
 	}
 
 	fmt.Printf("websocket: %s\n", data)
-	_, err := ws.conn.Write([]byte(data))
+	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(data))
 	if err != nil {
 		return fmt.Errorf("failed to send '%s': %s", data, err)
 	}
 	return nil
 }
 
-func (ws *WebSocket) Receive() ([]byte, error) {
-	data := make([]byte, 1000)
-	n, err := ws.conn.Read(data)
+func (ws *WebSocket) Receive() (data []byte, err error) {
+	_, data, err = ws.conn.ReadMessage()
 	if err != nil {
-		return data, fmt.Errorf("failed to read: %s", err)
+		return
 	}
 
-	fmt.Printf("websocket-data: %s\n", data)
-	return data[:n], nil
+	limit := len(data)
+	suffix := ""
+	if limit > 50 {
+		limit = 50
+		suffix = "..."
+	}
+	fmt.Printf("websocket-data: %s%s\n", data[:limit], suffix)
+	return
 }
 
 func (ws *WebSocket) Authenticate(token string) error {
-	_, err := ws.conn.Write([]byte(fmt.Sprintf(authFormat, ws.token)))
+	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(authFormat, ws.token)))
 	if err != nil {
 		return fmt.Errorf("failed to authenticate: %s", err)
 	}
@@ -125,7 +129,7 @@ func (ws *WebSocket) SetGZIP(enable bool) error {
 		arg = "on"
 	}
 
-	_, err := ws.conn.Write([]byte(fmt.Sprintf(gzipFormat, arg)))
+	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(gzipFormat, arg)))
 	if err != nil {
 		return fmt.Errorf("failed to authenticate: %s", err)
 	}
@@ -186,7 +190,6 @@ func (ws *WebSocket) Listen() {
 		ws.sendQueue = ws.sendQueue[1:]
 	}
 
-	ws.interrupt = make(chan struct{})
 	for {
 		select {
 		case <-ws.interrupt:
@@ -194,33 +197,60 @@ func (ws *WebSocket) Listen() {
 		default:
 			data, err := ws.Receive()
 			if err != nil {
-				fmt.Printf("failed to recieve data: %s\n", err)
+				fmt.Printf("failed to receive data: %s\n", err)
 				continue
 			}
 
-			resp := make([]json.RawMessage, 2)
-			err = json.Unmarshal(data, &resp)
-			if err != nil {
-				fmt.Printf("failed to unmarshal received data '%s': %s\n", data, err)
+			if len(data) < len(screepstype.GzipPrefix)+2 {
 				continue
 			}
 
-			channel, err := resp[0].MarshalJSON()
-			if err != nil {
-				fmt.Printf("failed to marshal channel name: %s", err)
-				continue
-			}
-
-			channelData, err := resp[1].MarshalJSON()
-			if err != nil {
-				fmt.Printf("failed to marshal channel data: %s", err)
-				continue
-			}
-
-			subscription, ok := ws.subscriptions[string(channel[1:len(channel)-1])]
-			if ok {
-				subscription <- channelData
+			if string(data[:len(screepstype.GzipPrefix)]) == screepstype.GzipPrefix {
+				err = ws.handleGzippedData(data)
+				if err != nil {
+					fmt.Printf("failed to handle gzipped data: %s\n", err)
+				}
+			} else {
+				err = ws.handleData(data)
+				if err != nil {
+					fmt.Printf("failed to handle data: %s\n", err)
+				}
 			}
 		}
 	}
+}
+
+func (ws *WebSocket) handleData(data []byte) error {
+	resp := make([]json.RawMessage, 2)
+	err := json.Unmarshal(data, &resp)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal received data '%s': %s\n", data, err)
+	}
+
+	channel, err := resp[0].MarshalJSON()
+	if err != nil {
+		return fmt.Errorf("failed to marshal channel name: %s", err)
+	}
+
+	channelData, err := resp[1].MarshalJSON()
+	if err != nil {
+		return fmt.Errorf("failed to marshal channel data: %s", err)
+	}
+
+	subscription, ok := ws.subscriptions[string(channel[1:len(channel)-1])]
+	if ok {
+		subscription <- channelData
+	}
+
+	return nil
+}
+
+func (ws *WebSocket) handleGzippedData(data []byte) error {
+	unzippedData, err := screepstype.Unzip(string(data))
+	if err != nil {
+		return fmt.Errorf("failed to unzip gzipped data: %s", err)
+	}
+
+	fmt.Printf("gzip-data: %s", unzippedData)
+	return nil
 }

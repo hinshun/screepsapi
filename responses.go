@@ -1,14 +1,16 @@
 package screepsapi
 
-import "encoding/json"
+import (
+	"github.com/hinshun/screepsapi/screepstype"
+)
 
 type APIResponse interface {
 	IsOk() bool
 }
 
 type Response struct {
-	Ok    int   `json:"ok"`
-	Error Error `json:"error"`
+	Ok    int               `json:"ok"`
+	Error screepstype.Error `json:"error"`
 }
 
 func (r *Response) IsOk() bool {
@@ -17,28 +19,7 @@ func (r *Response) IsOk() bool {
 
 type BranchesResponse struct {
 	Response
-	Branches []Branch `json:"list"`
-}
-
-type BadgeResponse struct {
-	// Type is either a BadgePreset or a BadgePath describing a custom
-	// badge vector.
-	Type json.RawMessage `json:"type"`
-
-	// Color1 is the first color of the badge. Colors can be either all
-	// unmarshalled into ColorHex or Color256.
-	Color1 json.RawMessage `json:"color1"`
-
-	// Color2 is the secondary color of the badge. Colors can be either all
-	// unmarshalled into ColorHex or Color256.
-	Color2 json.RawMessage `json:"color2"`
-
-	// Color3 is the tertiary color of the badge. Colors can be either all
-	// unmarshalled into ColorHex or Color256.
-	Color3 json.RawMessage `json:"color3"`
-
-	Param int  `json:"param"`
-	Flip  bool `json:"flip"`
+	Branches []screepstype.Branch `json:"list"`
 }
 
 type GenUniqueObjectNameResponse struct {
@@ -48,50 +29,51 @@ type GenUniqueObjectNameResponse struct {
 
 type InsertResponse struct {
 	Response
-	Result        InsertResult `json:"result"`
-	Ops           []InsertOps  `json:"ops"`
-	InsertedCount int          `json:"insertedCount"`
-	InsertedIDs   []string     `json:"insertedIDs"`
+	Result        screepstype.InsertResult `json:"result"`
+	Ops           []screepstype.InsertOps  `json:"ops"`
+	InsertedCount int                      `json:"insertedCount"`
+	InsertedIDs   []string                 `json:"insertedIDs"`
 }
 
 type LeaderboardFindResponse struct {
 	Response
-	LeaderboardPosition
-	Positions []LeaderboardPosition `json:"list"`
+	screepstype.LeaderboardPosition
+	Positions []screepstype.LeaderboardPosition `json:"list"`
 }
 
 type LeaderboardListResponse struct {
 	Response
-	Positions []LeaderboardPosition `json:"list"`
-	Count     int                   `json:"count"`
-	Users     map[string]User       `json:"users"`
+	Positions []screepstype.LeaderboardPosition `json:"list"`
+	Count     int                               `json:"count"`
+	Users     map[string]screepstype.User       `json:"users"`
 }
 
 type LeaderboardSeasonsResponse struct {
 	Response
-	Seasons []Season `json:"seasons"`
+	Seasons []screepstype.Season `json:"seasons"`
 }
 
 type MapStatsResponse struct {
 	Response
-	Stats map[string]MapRoomStats `json:"stats"`
-	Users map[string]User         `json:"users"`
+	Stats map[string]screepstype.MapRoomStats `json:"stats"`
+	Users map[string]screepstype.User         `json:"users"`
 }
 
 type MeResponse struct {
 	Response
-	ID                 string        `json:"_id"`
-	Email              string        `json:"email"`
-	Username           string        `json:"username"`
-	CPU                int           `json:"cpu"`
-	Badge              BadgeResponse `json:"badge"`
-	Password           bool          `json:"password"`
-	Credits            int           `json:"credits"`
-	PromoPeriodUntil   int           `json:"promoPeriodUntil"`
-	Money              int           `json:"money"`
-	SubscriptionTokens int           `json:"subscriptionTokens"`
-	GitHub             GitHub        `json:"github"`
-	Steam              Steam         `json:"steam"`
+	ID                 string             `json:"_id"`
+	Email              string             `json:"email"`
+	Username           string             `json:"username"`
+	CPU                int                `json:"cpu"`
+	Badge              screepstype.Badge  `json:"badge"`
+	Password           bool               `json:"password"`
+	Credits            int                `json:"credits"`
+	LastRespawnDate    int                `json:"lastRespawnDate"`
+	PromoPeriodUntil   int                `json:"promoPeriodUntil"`
+	Money              int                `json:"money"`
+	SubscriptionTokens int                `json:"subscriptionTokens"`
+	GitHub             screepstype.GitHub `json:"github"`
+	Steam              screepstype.Steam  `json:"steam"`
 }
 
 type MemoryResponse struct {
@@ -106,13 +88,13 @@ type MemorySegmentResponse struct {
 
 type MessagesIndexResponse struct {
 	Response
-	Messages []MessageWithRecipients `json:"messages"`
-	Users    map[string]User         `json:"users"`
+	Messages []screepstype.MessageWithRecipients `json:"messages"`
+	Users    map[string]screepstype.User         `json:"users"`
 }
 
 type MessagesListResponse struct {
 	Response
-	Messages []Message `json:"messages"`
+	Messages []screepstype.Message `json:"messages"`
 }
 
 type MessagesUnreadCountResponse struct {
@@ -122,24 +104,24 @@ type MessagesUnreadCountResponse struct {
 
 type MoneyHistoryResponse struct {
 	Response
-	Page     int            `json:"page"`
-	HasMore  bool           `json:"hasMore"`
-	Messages []MoneyMessage `json:"messages"`
+	Page     int                        `json:"page"`
+	HasMore  bool                       `json:"hasMore"`
+	Messages []screepstype.MoneyMessage `json:"messages"`
 }
 
 type MyOrdersResponse struct {
 	Response
-	Orders []MarketOrder `json:"list"`
+	Orders []screepstype.MarketOrder `json:"list"`
 }
 
 type OrdersIndexResponse struct {
 	Response
-	ResourceCounts []ResourceCount `json:"list"`
+	ResourceCounts []screepstype.ResourceCount `json:"list"`
 }
 
 type OrdersResponse struct {
 	Response
-	Orders []MarketOrder `json:"list"`
+	Orders []screepstype.MarketOrder `json:"list"`
 }
 
 type PlaceSpawnResponse struct {
@@ -161,8 +143,8 @@ type PushCodeResponse struct {
 
 type RespawnResponse struct {
 	Response
-	First  Document `json:"0"`
-	Second Document `json:"1"`
+	First  screepstype.Document `json:"0"`
+	Second screepstype.Document `json:"1"`
 }
 
 type RespawnProhibitedRoomsResponse struct {
@@ -172,18 +154,18 @@ type RespawnProhibitedRoomsResponse struct {
 
 type RoomOverviewResponse struct {
 	Response
-	Owner RoomOwner `json:"owner"`
-	Stats RoomStats `json:"stats"`
+	Owner screepstype.RoomOwner `json:"owner"`
+	Stats screepstype.RoomStats `json:"stats"`
 }
 
 type RoomStatusResponse struct {
 	Response
-	Room Room `json:"room"`
+	Room screepstype.Room `json:"room"`
 }
 
 type RoomTerrainResponse struct {
 	Response
-	Terrain []RoomTerrain `json:"terrain"`
+	Terrain []screepstype.RoomTerrain `json:"terrain"`
 }
 
 type SignInResponse struct {
@@ -193,20 +175,20 @@ type SignInResponse struct {
 
 type UpsertResponse struct {
 	Response
-	Result     Document      `json:"result"`
-	Connection Connection    `json:"connection"`
-	Message    UpsertMessage `json:"message"`
+	Result     screepstype.Document      `json:"result"`
+	Connection screepstype.Connection    `json:"connection"`
+	Message    screepstype.UpsertMessage `json:"message"`
 }
 
 type UserFindResponse struct {
 	Response
-	User User `json:"user"`
+	User screepstype.User `json:"user"`
 }
 
 type UserOverviewResponse struct {
 	Response
-	Shards map[string]Shard   `json:"shards"`
-	Totals StatsWithIntervals `json:"totals"`
+	Shards map[string]screepstype.Shard   `json:"shards"`
+	Totals screepstype.StatsWithIntervals `json:"totals"`
 }
 
 type UserRoomsResponse struct {
@@ -216,14 +198,14 @@ type UserRoomsResponse struct {
 
 type UserStatsResponse struct {
 	Response
-	Stats StatsWithIntervals `json:"stats"`
+	Stats screepstype.StatsWithIntervals `json:"stats"`
 }
 
 type VersionResponse struct {
 	Response
-	Package    int        `json:"package"`
-	Protocol   int        `json:"protocol"`
-	ServerData ServerData `json:"serverData"`
+	Package    int                    `json:"package"`
+	Protocol   int                    `json:"protocol"`
+	ServerData screepstype.ServerData `json:"serverData"`
 }
 
 type WorldStartRoomResponse struct {
@@ -233,7 +215,7 @@ type WorldStartRoomResponse struct {
 
 type WorldStatusResponse struct {
 	Response
-	Status WorldStatus `json:"status"`
+	Status screepstype.WorldStatus `json:"status"`
 }
 
 type XsollaUserResponse struct {

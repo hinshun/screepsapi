@@ -3,6 +3,8 @@ package screepsws
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 type Response struct {
@@ -20,8 +22,8 @@ type CodeResponse struct {
 
 type ConsoleResponse struct {
 	Response
-	Shard    string           `json:"shard"`
-	Messages []ConsoleMessage `json:"messages"`
+	Shard    string                       `json:"shard"`
+	Messages []screepstype.ConsoleMessage `json:"messages"`
 }
 
 type CPUResponse struct {
@@ -36,8 +38,8 @@ type MemoryResponse struct {
 
 type MessageResponse struct {
 	Response
-	NewMessage  NewMessage  `json:"newMessage"`
-	MessageRead MessageRead `json:"messageRead"`
+	NewMessage  screepstype.NewMessage  `json:"newMessage"`
+	MessageRead screepstype.MessageRead `json:"messageRead"`
 }
 
 type NewMessageResponse struct {
@@ -46,6 +48,10 @@ type NewMessageResponse struct {
 
 type RoomResponse struct {
 	Response
+	Objects  map[string]string    `json:"objects"`
+	GameTime int                  `json:"gameTime"`
+	Info     screepstype.RoomInfo `json:"info"`
+	Visual   string               `json:"visual"`
 }
 
 type RoomMapResponse struct {
@@ -62,6 +68,8 @@ type RoomMapResponse struct {
 
 type SetActiveBranchResponse struct {
 	Response
+	Branch     string                 `json:"branch"`
+	ActiveName screepstype.ActiveName `json:"branch"`
 }
 
 type ServerMessageResponse struct {

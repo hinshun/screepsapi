@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 func (c *Client) Branches() (BranchesResponse, error) {
@@ -64,7 +66,7 @@ func (c *Client) PushCode(branch string, modules map[string]string) (PushCodeRes
 	return pushCodeResp, nil
 }
 
-func (c *Client) SetActiveBranch(branch string, activeName ActiveName) (Response, error) {
+func (c *Client) SetActiveBranch(branch string, activeName screepstype.ActiveName) (Response, error) {
 	setActiveBranchReq := SetActiveBranchRequest{
 		Branch:     branch,
 		ActiveName: activeName,

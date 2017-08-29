@@ -1,5 +1,7 @@
 package screepsapi
 
+import "github.com/hinshun/screepsapi/screepstype"
+
 type APIClient interface {
 	// Auth
 	Me(shard string) (MeResponse, error)
@@ -10,15 +12,15 @@ type APIClient interface {
 	Console(shard, expression string) (InsertResponse, error)
 	PullCode(branch string) (PullCodeResponse, error)
 	PushCode(branch string, modules map[string]string) (PushCodeResponse, error)
-	SetActiveBranch(branch string, activeName ActiveName) (Response, error)
+	SetActiveBranch(branch string, activeName screepstype.ActiveName) (Response, error)
 
 	// Game
 	AddObjectIntent(addObjectIntentReq AddObjectIntentRequest) (UpsertResponse, error)
-	CheckUniqueObjectName(shard, name string, uniqueObjectNameType UniqueObjectName) (Response, error)
+	CheckUniqueObjectName(shard, name string, uniqueObjectNameType screepstype.UniqueObjectName) (Response, error)
 	CreateConstruction(createConstructionReq CreateConstructionRequest) (UpsertResponse, error)
 	CreateFlag(createFlagReq CreateFlagRequest) (UpsertResponse, error)
 	DestroyStructure(shard, room, user string, ids []string) (UpsertResponse, error)
-	GenUniqueObjectName(shard string, uniqueObjectNameType UniqueObjectName) (GenUniqueObjectNameResponse, error)
+	GenUniqueObjectName(shard string, uniqueObjectNameType screepstype.UniqueObjectName) (GenUniqueObjectNameResponse, error)
 	PlaceSpawn(placeSpawnReq PlaceSpawnRequest) (PlaceSpawnResponse, error)
 	RemoveFlag(shard, room, name string) (UpsertResponse, error)
 	RemoveObject(shard, room, id string) (UpsertResponse, error)
@@ -34,7 +36,7 @@ type APIClient interface {
 	LeaderboardSeasons() (LeaderboardSeasonsResponse, error)
 
 	// Map
-	MapStats(shard string, rooms []string, statName StatName, statsPeriod StatsPeriod) (MapStatsResponse, error)
+	MapStats(shard string, rooms []string, statName screepstype.StatName, statsPeriod screepstype.StatsPeriod) (MapStatsResponse, error)
 
 	// Market
 	MoneyHistory() (MoneyHistoryResponse, error)
@@ -54,15 +56,15 @@ type APIClient interface {
 	MessagesUnreadCount() (MessagesUnreadCountResponse, error)
 
 	// Room
-	RoomOverview(shard, room string, statsPeriod StatsPeriod) (RoomOverviewResponse, error)
+	RoomOverview(shard, room string, statsPeriod screepstype.StatsPeriod) (RoomOverviewResponse, error)
 	RoomStatus(shard, room string) (RoomStatusResponse, error)
 	RoomTerrain(shard, room string, encoded bool) (RoomTerrainResponse, error)
 
 	// User
 	UserFind(id, username string) (UserFindResponse, error)
-	UserOverview(statName StatName, statsPeriod StatsPeriod) (UserOverviewResponse, error)
+	UserOverview(statName screepstype.StatName, statsPeriod screepstype.StatsPeriod) (UserOverviewResponse, error)
 	UserRooms() (UserRoomsResponse, error)
-	UserStats(id string, statsPeriod StatsPeriod) (UserStatsResponse, error)
+	UserStats(id string, statsPeriod screepstype.StatsPeriod) (UserStatsResponse, error)
 
 	// Version
 	Version() (VersionResponse, error)
