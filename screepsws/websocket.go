@@ -95,7 +95,7 @@ func (ws *WebSocket) Send(data string) error {
 		return nil
 	}
 
-	fmt.Printf("websocket: %s\n", data)
+	// fmt.Printf("websocket: %s\n", data)
 	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(data))
 	if err != nil {
 		return fmt.Errorf("failed to send '%s': %s", data, err)
@@ -187,6 +187,20 @@ func (ws *WebSocket) Listen() {
 		ws.sendQueue = ws.sendQueue[1:]
 	}
 
+	for {
+		select {
+		case <-ws.interrupt:
+			return
+		default:
+			err := ws.receiveFrame()
+			if err != nil {
+				fmt.Printf("failed to receive frame: %s\n", err)
+			}
+		}
+	}
+}
+
+func (ws *WebSocket) receiveFrame() error {
 	// When the websocket connection is closed, a blocking Receive will exit due
 	// to the closed connection, however gorilla/websocket then panics with nil
 	// pointer exception now that the connection is closed.
@@ -197,46 +211,39 @@ func (ws *WebSocket) Listen() {
 			if !ok {
 				panic(r)
 			}
-
 			fmt.Printf("err exiting goroutine: %s\n", err)
 		}
 	}()
 
-	for {
-		select {
-		case <-ws.interrupt:
-			return
-		default:
-			data, err := ws.Receive()
-			if err != nil {
-				fmt.Printf("failed to receive data: %s\n", err)
-				continue
-			}
+	data, err := ws.Receive()
+	if err != nil {
+		return fmt.Errorf("failed to receive data: %s", err)
+	}
 
-			if len(data) < len(screepstype.GzipPrefix)+2 {
-				continue
-			}
+	if len(data) < len(screepstype.GzipPrefix)+2 {
+		return fmt.Errorf("frame data too small: %s", data)
+	}
 
-			if string(data[:len(screepstype.GzipPrefix)]) == screepstype.GzipPrefix {
-				err = ws.handleGzippedData(data)
-				if err != nil {
-					fmt.Printf("failed to handle gzipped data: %s\n", err)
-				}
-			} else {
-				err = ws.handleData(data)
-				if err != nil {
-					fmt.Printf("failed to handle data: %s\n", err)
-				}
-			}
+	if string(data[:len(screepstype.GzipPrefix)]) == screepstype.GzipPrefix {
+		err = ws.handleGzippedData(data)
+		if err != nil {
+			return fmt.Errorf("failed to handle gzipped data: %s", err)
 		}
 	}
+
+	err = ws.handleData(data)
+	if err != nil {
+		return fmt.Errorf("failed to handle data: %s", err)
+	}
+
+	return nil
 }
 
 func (ws *WebSocket) handleData(data []byte) error {
 	resp := make([]json.RawMessage, 2)
 	err := json.Unmarshal(data, &resp)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal received data '%s': %s\n", data, err)
+		return fmt.Errorf("failed to unmarshal received data '%s': %s", data, err)
 	}
 
 	channel, err := resp[0].MarshalJSON()

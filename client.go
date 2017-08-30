@@ -81,7 +81,7 @@ func (c *Client) get(path string, resp interface{}, values url.Values, statusCod
 	if err != nil {
 		return fmt.Errorf("failed to read data: %s", err)
 	}
-	fmt.Printf("get-data: %s\n", data)
+	// fmt.Printf("get-data: %s\n", data)
 
 	err = json.Unmarshal(data, resp)
 	if err != nil {
@@ -103,7 +103,7 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 		if err != nil {
 			return fmt.Errorf("failed to marshal request: %s", err)
 		}
-		fmt.Printf("post: %s\n", reqJSON)
+		// fmt.Printf("post: %s\n", reqJSON)
 		body = bytes.NewReader(reqJSON)
 	}
 	postURL, _ := url.Parse(c.serverURL.String())
@@ -132,7 +132,7 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 	if err != nil {
 		return fmt.Errorf("failed to read data: %s", err)
 	}
-	fmt.Printf("post-data: %s\n", data)
+	// fmt.Printf("post-data: %s\n", data)
 
 	err = json.Unmarshal(data, resp)
 	if err != nil {
