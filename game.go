@@ -154,18 +154,18 @@ func (c *Client) SuicideCreep(shard, room, id string) (UpsertResponse, error) {
 	})
 }
 
-func (c *Client) Time(shard string) (Response, error) {
-	resp := Response{}
+func (c *Client) Time(shard string) (TimeResponse, error) {
+	timeResp := TimeResponse{}
 
 	values := make(url.Values)
 	values.Add(shardKey, shard)
 
-	err := c.get(timePath, &resp, values, http.StatusOK)
+	err := c.get(timePath, &timeResp, values, http.StatusOK)
 	if err != nil {
-		return resp, fmt.Errorf("failed to get user stats: %s", err)
+		return timeResp, fmt.Errorf("failed to get game time: %s", err)
 	}
 
-	return resp, nil
+	return timeResp, nil
 }
 
 func (c *Client) UnclaimController(shard, room, id string) (UpsertResponse, error) {

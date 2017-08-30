@@ -22,8 +22,8 @@ type CodeResponse struct {
 
 type ConsoleResponse struct {
 	Response
-	Shard    string                       `json:"shard"`
-	Messages []screepstype.ConsoleMessage `json:"messages"`
+	Shard    string                      `json:"shard"`
+	Messages screepstype.ConsoleMessages `json:"messages"`
 }
 
 type CPUResponse struct {

@@ -173,6 +173,11 @@ type SignInResponse struct {
 	Token string `json:"token"`
 }
 
+type TimeResponse struct {
+	Response
+	Time int `json:"time"`
+}
+
 type UpsertResponse struct {
 	Response
 	Result     screepstype.Document      `json:"result"`

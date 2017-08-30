@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 )
 
@@ -22,9 +23,10 @@ var (
 )
 
 type Client struct {
-	Token      string
 	httpClient *http.Client
 	serverURL  *url.URL
+	token      string
+	tokenLock  sync.RWMutex
 }
 
 type Credentials struct {
@@ -48,13 +50,16 @@ func NewClient(credentials Credentials) (*Client, error) {
 		serverURL:  serverURL,
 	}
 
-	token, err := client.SignIn(credentials.Email, credentials.Password)
+	err = client.SignIn(credentials.Email, credentials.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
-	client.Token = token
 
 	return client, nil
+}
+
+func (c *Client) Token() string {
+	return c.token
 }
 
 func (c *Client) get(path string, resp interface{}, values url.Values, statusCode int) error {
@@ -148,7 +153,10 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 }
 
 func (c *Client) do(req *http.Request) (*http.Response, error) {
-	req.Header.Set(tokenHeader, c.Token)
-	req.Header.Set(usernameHeader, c.Token)
+	c.tokenLock.RLock()
+	req.Header.Set(tokenHeader, c.token)
+	req.Header.Set(usernameHeader, c.token)
+	c.tokenLock.RUnlock()
+
 	return c.httpClient.Do(req)
 }

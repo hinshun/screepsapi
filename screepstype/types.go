@@ -55,7 +55,7 @@ type Connection struct {
 	Port int    `json:"port"`
 }
 
-type ConsoleMessage struct {
+type ConsoleMessages struct {
 	Log     []string `json:"log"`
 	Results []string `json:"results"`
 }

@@ -28,42 +28,19 @@ func NewWebSocket(rawServerURL, token string) (*WebSocket, error) {
 		return nil, fmt.Errorf("failed to parse server url '%s': %s", rawServerURL, err)
 	}
 
-	return &WebSocket{
+	ws := &WebSocket{
 		serverURL:     serverURL,
 		token:         token,
 		interrupt:     make(chan struct{}),
 		subscriptions: make(map[string]chan []byte),
-	}, nil
-}
-
-func (ws *WebSocket) Connect() error {
-	if ws.conn != nil {
-		return fmt.Errorf("websocket is already connected")
 	}
 
-	websocketURL, _ := url.Parse(ws.serverURL.String())
-	websocketURL.Scheme = strings.Replace(websocketURL.Scheme, "http", "ws", 1)
-	websocketURL.Path = socketPath
-
-	conn, _, err := websocket.DefaultDialer.Dial(websocketURL.String(), nil)
+	err = ws.connect()
 	if err != nil {
-		return fmt.Errorf("failed to create websocket connection: %s", err)
-	}
-	ws.conn = conn
-
-	err = ws.Authenticate(ws.token)
-	if err != nil {
-		return fmt.Errorf("failed to authenticate: %s", err)
+		return nil, fmt.Errorf("failed to connect to '%s': %s", serverURL.String(), err)
 	}
 
-	err = ws.SetGZIP(true)
-	if err != nil {
-		return fmt.Errorf("failed to enable gzip: %s", err)
-	}
-
-	go ws.Listen()
-
-	return nil
+	return ws, nil
 }
 
 func (ws *WebSocket) Close() error {
@@ -87,7 +64,90 @@ func (ws *WebSocket) Close() error {
 	return nil
 }
 
-func (ws *WebSocket) Send(data string) error {
+func (ws *WebSocket) Subscribe(channel string) (<-chan []byte, error) {
+	_, exists := ws.subscriptions[channel]
+	if exists {
+		return nil, fmt.Errorf("channel '%s' already subscribed", channel)
+	}
+
+	err := ws.send(fmt.Sprintf(subscribeFormat, channel))
+	if err != nil {
+		return nil, fmt.Errorf("failed to subscribe: %s", err)
+	}
+
+	dataChan := make(chan []byte)
+	ws.subscriptions[channel] = dataChan
+
+	return dataChan, nil
+}
+
+func (ws *WebSocket) Unsubscribe(channel string) error {
+	err := ws.send(fmt.Sprintf(unsubscribeFormat, channel))
+	if err != nil {
+		return fmt.Errorf("failed to unsubscribe: %s", err)
+	}
+
+	dataChan, exists := ws.subscriptions[channel]
+	if exists {
+		close(dataChan)
+		delete(ws.subscriptions, channel)
+	}
+
+	return nil
+}
+
+func (ws *WebSocket) connect() error {
+	if ws.conn != nil {
+		return fmt.Errorf("websocket is already connected")
+	}
+
+	websocketURL, _ := url.Parse(ws.serverURL.String())
+	websocketURL.Scheme = strings.Replace(websocketURL.Scheme, "http", "ws", 1)
+	websocketURL.Path = socketPath
+
+	conn, _, err := websocket.DefaultDialer.Dial(websocketURL.String(), nil)
+	if err != nil {
+		return fmt.Errorf("failed to create websocket connection: %s", err)
+	}
+	ws.conn = conn
+
+	err = ws.authenticate(ws.token)
+	if err != nil {
+		return fmt.Errorf("failed to authenticate: %s", err)
+	}
+
+	err = ws.setGZIP(true)
+	if err != nil {
+		return fmt.Errorf("failed to enable gzip: %s", err)
+	}
+
+	go ws.listen()
+
+	return nil
+}
+
+func (ws *WebSocket) authenticate(token string) error {
+	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(authFormat, ws.token)))
+	if err != nil {
+		return fmt.Errorf("failed to authenticate: %s", err)
+	}
+	return nil
+}
+
+func (ws *WebSocket) setGZIP(enable bool) error {
+	arg := "off"
+	if enable {
+		arg = "on"
+	}
+
+	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(gzipFormat, arg)))
+	if err != nil {
+		return fmt.Errorf("failed to authenticate: %s", err)
+	}
+	return nil
+}
+
+func (ws *WebSocket) send(data string) error {
 	ws.authLock.RLock()
 	defer ws.authLock.RUnlock()
 	if !ws.authenticated {
@@ -103,7 +163,7 @@ func (ws *WebSocket) Send(data string) error {
 	return nil
 }
 
-func (ws *WebSocket) Receive() (data []byte, err error) {
+func (ws *WebSocket) receive() (data []byte, err error) {
 	_, data, err = ws.conn.ReadMessage()
 	if err != nil {
 		return
@@ -112,62 +172,9 @@ func (ws *WebSocket) Receive() (data []byte, err error) {
 	return
 }
 
-func (ws *WebSocket) Authenticate(token string) error {
-	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(authFormat, ws.token)))
-	if err != nil {
-		return fmt.Errorf("failed to authenticate: %s", err)
-	}
-	return nil
-}
-
-func (ws *WebSocket) SetGZIP(enable bool) error {
-	arg := "off"
-	if enable {
-		arg = "on"
-	}
-
-	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(gzipFormat, arg)))
-	if err != nil {
-		return fmt.Errorf("failed to authenticate: %s", err)
-	}
-	return nil
-}
-
-func (ws *WebSocket) Subscribe(channel string) (<-chan []byte, error) {
-	_, exists := ws.subscriptions[channel]
-	if exists {
-		return nil, fmt.Errorf("channel '%s' already subscribed", channel)
-	}
-
-	err := ws.Send(fmt.Sprintf(subscribeFormat, channel))
-	if err != nil {
-		return nil, fmt.Errorf("failed to subscribe: %s", err)
-	}
-
-	dataChan := make(chan []byte)
-	ws.subscriptions[channel] = dataChan
-
-	return dataChan, nil
-}
-
-func (ws *WebSocket) Unsubscribe(channel string) error {
-	err := ws.Send(fmt.Sprintf(unsubscribeFormat, channel))
-	if err != nil {
-		return fmt.Errorf("failed to unsubscribe: %s", err)
-	}
-
-	dataChan, exists := ws.subscriptions[channel]
-	if exists {
-		close(dataChan)
-		delete(ws.subscriptions, channel)
-	}
-
-	return nil
-}
-
-func (ws *WebSocket) Listen() {
+func (ws *WebSocket) listen() {
 	for i := 0; i < 4; i++ {
-		_, err := ws.Receive()
+		_, err := ws.receive()
 		if err != nil {
 			fmt.Printf("failed to receive connection handshake: %s\n", err)
 			return
@@ -180,7 +187,7 @@ func (ws *WebSocket) Listen() {
 
 	for len(ws.sendQueue) > 0 {
 		data := ws.sendQueue[0]
-		err := ws.Send(data)
+		err := ws.send(data)
 		if err != nil {
 			fmt.Printf("failed to send data off queue '%s': %s\n", data, err)
 		}
@@ -201,7 +208,7 @@ func (ws *WebSocket) Listen() {
 }
 
 func (ws *WebSocket) receiveFrame() error {
-	// When the websocket connection is closed, a blocking Receive will exit due
+	// When the websocket connection is closed, a blocking receive will exit due
 	// to the closed connection, however gorilla/websocket then panics with nil
 	// pointer exception now that the connection is closed.
 	defer func() {
@@ -215,7 +222,7 @@ func (ws *WebSocket) receiveFrame() error {
 		}
 	}()
 
-	data, err := ws.Receive()
+	data, err := ws.receive()
 	if err != nil {
 		return fmt.Errorf("failed to receive data: %s", err)
 	}
