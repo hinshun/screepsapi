@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/hinshun/screepsapi/screepsws"
 )
 
 const (
@@ -24,10 +22,9 @@ var (
 )
 
 type Client struct {
-	WebSocket  *screepsws.WebSocket
+	Token      string
 	httpClient *http.Client
 	serverURL  *url.URL
-	token      string
 }
 
 type Credentials struct {
@@ -50,11 +47,12 @@ func NewClient(credentials Credentials) (*Client, error) {
 		httpClient: httpClient,
 		serverURL:  serverURL,
 	}
-	err = client.SignIn(credentials.Email, credentials.Password)
+
+	token, err := client.SignIn(credentials.Email, credentials.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
-	client.WebSocket = screepsws.NewWebSocket(client.serverURL, client.token)
+	client.Token = token
 
 	return client, nil
 }
@@ -126,9 +124,9 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 	}
 	defer httpResp.Body.Close()
 
-	if httpResp.StatusCode != statusCode {
-		return fmt.Errorf("failed to GET '%s': status %d", postURL, httpResp.StatusCode)
-	}
+	// if httpResp.StatusCode != statusCode {
+	// 	return fmt.Errorf("failed to POST '%s': status %d", postURL, httpResp.StatusCode)
+	// }
 
 	data, err := ioutil.ReadAll(httpResp.Body)
 	if err != nil {
@@ -150,7 +148,7 @@ func (c *Client) post(path string, req, resp interface{}, values url.Values, sta
 }
 
 func (c *Client) do(req *http.Request) (*http.Response, error) {
-	req.Header.Set(tokenHeader, c.token)
-	req.Header.Set(usernameHeader, c.token)
+	req.Header.Set(tokenHeader, c.Token)
+	req.Header.Set(usernameHeader, c.Token)
 	return c.httpClient.Do(req)
 }

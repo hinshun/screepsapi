@@ -20,7 +20,7 @@ func (c *Client) Me(shard string) (MeResponse, error) {
 	return meResp, nil
 }
 
-func (c *Client) SignIn(email, password string) error {
+func (c *Client) SignIn(email, password string) (string, error) {
 	signInReq := SignInRequest{
 		Email:    email,
 		Password: password,
@@ -29,9 +29,8 @@ func (c *Client) SignIn(email, password string) error {
 
 	err := c.post(signInPath, &signInReq, &signInResp, nil, http.StatusOK)
 	if err != nil {
-		return fmt.Errorf("failed to post auth signin: %s", err)
+		return "", fmt.Errorf("failed to post auth signin: %s", err)
 	}
 
-	c.token = signInResp.Token
-	return nil
+	return signInResp.Token, nil
 }

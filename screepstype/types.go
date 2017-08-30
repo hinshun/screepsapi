@@ -383,3 +383,6 @@ type User struct {
 	Badge    Badge  `json:"badge"`
 	GCL      int    `json:"gcl"`
 }
+
+type UserObject struct {
+}

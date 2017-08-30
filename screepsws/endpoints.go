@@ -28,7 +28,6 @@ const (
 	setActiveBranchFormat = "user:%s/set-active-branch"
 
 	// Room subscriptions
-	// TODO(hinshun): unimplemented
 	roomFormat    = "room:%s/%s"
 	roomMapFormat = "roomMap2:%s/%s"
 )

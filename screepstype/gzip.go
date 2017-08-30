@@ -3,8 +3,10 @@ package screepstype
 import (
 	"bytes"
 	"compress/gzip"
+	"compress/zlib"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"strings"
 )
@@ -13,7 +15,7 @@ const (
 	GzipPrefix = "gz"
 )
 
-func Unzip(data string) ([]byte, error) {
+func Unzip(data string, compressionType CompressionType) ([]byte, error) {
 	dataParts := strings.Split(data, fmt.Sprintf("%s:", GzipPrefix))
 	if len(dataParts) != 2 && dataParts[0] != GzipPrefix {
 		return nil, fmt.Errorf("data not in format %s: %s", GzipPrefix, data)
@@ -25,7 +27,15 @@ func Unzip(data string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode data: %s", err)
 	}
 
-	gzipReader, err := gzip.NewReader(bytes.NewReader(decodedData))
+	var gzipReader io.ReadCloser
+	switch compressionType {
+	case CompressionTypeGzip:
+		gzipReader, err = gzip.NewReader(bytes.NewReader(decodedData))
+	case CompressionTypeZlib:
+		gzipReader, err = zlib.NewReader(bytes.NewReader(decodedData))
+	default:
+		return nil, fmt.Errorf("unsupported compression type: %s", compressionType)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to create gzip reader over data: %s", err)
 	}

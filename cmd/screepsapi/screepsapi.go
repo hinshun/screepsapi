@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"time"
 
 	"github.com/hinshun/screepsapi"
 )
@@ -34,45 +33,45 @@ func test() error {
 		return fmt.Errorf("failed to create screepsapi client: %s", err)
 	}
 
-	// version, err := client.Version()
+	version, err := client.Version()
+	if err != nil {
+		return err
+	}
+	fmt.Printf("version: %#v\n", version)
+
+	// err = client.WebSocket.Connect()
 	// if err != nil {
 	// 	return err
 	// }
-	// fmt.Printf("version: %#v\n", version)
 
-	err = client.WebSocket.Connect()
-	if err != nil {
-		return err
-	}
+	// roomChan, err := client.WebSocket.SubscribeRoom("shard1", "E8N35")
+	// if err != nil {
+	// 	return err
+	// }
 
-	roomChan, err := client.WebSocket.SubscribeRoom("shard1", "E8N35")
-	if err != nil {
-		return err
-	}
+	// go func() {
+	// 	for {
+	// 		roomData := <-roomChan
+	// 		fmt.Printf("room-data: %#v\n", roomData)
+	// 	}
+	// }()
 
-	go func() {
-		for {
-			roomData := <-roomChan
-			fmt.Printf("room-data: %#\n", roomData)
-		}
-	}()
+	// time.Sleep(10 * time.Second)
 
-	time.Sleep(10 * time.Second)
-
-	err = client.WebSocket.UnsubscribeRoom("shard1", "E8N35")
-	if err != nil {
-		return err
-	}
+	// err = client.WebSocket.UnsubscribeRoom("shard1", "E8N35")
+	// if err != nil {
+	// 	return err
+	// }
 
 	// err = client.WebSocket.Send("unsubscribe room:shard1/E8N35")
 	// if err != nil {
 	// 	return fmt.Errorf("failed to unsubscribe: %s", err)
 	// }
 
-	err = client.WebSocket.Close()
-	if err != nil {
-		return err
-	}
+	// err = client.WebSocket.Close()
+	// if err != nil {
+	// 	return err
+	// }
 
 	// xsollaUser, err := client.XsollaUser("shard1")
 	// if err != nil {

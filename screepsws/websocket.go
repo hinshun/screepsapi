@@ -7,9 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/hinshun/screepsapi/screepstype"
-
 	"github.com/gorilla/websocket"
+	"github.com/hinshun/screepsapi/screepstype"
 )
 
 type WebSocket struct {
@@ -23,13 +22,18 @@ type WebSocket struct {
 	subscriptions map[string]chan []byte
 }
 
-func NewWebSocket(serverURL *url.URL, token string) *WebSocket {
+func NewWebSocket(rawServerURL, token string) (*WebSocket, error) {
+	serverURL, err := url.Parse(rawServerURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse server url '%s': %s", rawServerURL, err)
+	}
+
 	return &WebSocket{
 		serverURL:     serverURL,
 		token:         token,
 		interrupt:     make(chan struct{}),
 		subscriptions: make(map[string]chan []byte),
-	}
+	}, nil
 }
 
 func (ws *WebSocket) Connect() error {
@@ -104,14 +108,7 @@ func (ws *WebSocket) Receive() (data []byte, err error) {
 	if err != nil {
 		return
 	}
-
-	limit := len(data)
-	suffix := ""
-	if limit > 50 {
-		limit = 50
-		suffix = "..."
-	}
-	fmt.Printf("websocket-data: %s%s\n", data[:limit], suffix)
+	// fmt.Printf("websocket-data: %s\n", data)
 	return
 }
 
@@ -190,6 +187,21 @@ func (ws *WebSocket) Listen() {
 		ws.sendQueue = ws.sendQueue[1:]
 	}
 
+	// When the websocket connection is closed, a blocking Receive will exit due
+	// to the closed connection, however gorilla/websocket then panics with nil
+	// pointer exception now that the connection is closed.
+	defer func() {
+		r := recover()
+		if r != nil {
+			err, ok := r.(error)
+			if !ok {
+				panic(r)
+			}
+
+			fmt.Printf("err exiting goroutine: %s\n", err)
+		}
+	}()
+
 	for {
 		select {
 		case <-ws.interrupt:
@@ -246,11 +258,11 @@ func (ws *WebSocket) handleData(data []byte) error {
 }
 
 func (ws *WebSocket) handleGzippedData(data []byte) error {
-	unzippedData, err := screepstype.Unzip(string(data))
+	unzippedData, err := screepstype.Unzip(string(data), screepstype.CompressionTypeZlib)
 	if err != nil {
 		return fmt.Errorf("failed to unzip gzipped data: %s", err)
 	}
 
-	fmt.Printf("gzip-data: %s", unzippedData)
-	return nil
+	// fmt.Printf("gzip-data: %s", unzippedData)
+	return ws.handleData(unzippedData)
 }

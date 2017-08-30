@@ -48,10 +48,20 @@ type NewMessageResponse struct {
 
 type RoomResponse struct {
 	Response
-	Objects  map[string]string    `json:"objects"`
-	GameTime int                  `json:"gameTime"`
-	Info     screepstype.RoomInfo `json:"info"`
-	Visual   string               `json:"visual"`
+	Flags       int                               `json:"flags"`
+	Info        screepstype.RoomInfo              `json:"info"`
+	Users       map[string]screepstype.UserObject `json:"users"`
+	Controllers map[string]screepstype.Controller
+	Creeps      map[string]screepstype.Creep
+	Energies    map[string]screepstype.Energy
+	Extensions  map[string]screepstype.Extension
+	Minerals    map[string]screepstype.Mineral
+	Roads       map[string]screepstype.Road
+	Sources     map[string]screepstype.Source
+	Spawns      map[string]screepstype.Spawn
+	Storages    map[string]screepstype.Storage
+	Towers      map[string]screepstype.Tower
+	Walls       map[string]screepstype.Wall
 }
 
 type RoomMapResponse struct {

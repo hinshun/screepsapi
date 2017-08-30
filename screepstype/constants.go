@@ -7,6 +7,20 @@ const (
 	ActiveNameSim              = "activeSim"
 )
 
+type BodyPartType string
+
+const (
+	BodyPartTypeMove   BodyPartType = "move"
+	BodyPartTypeWork                = "work"
+	BodyPartTypeCarry               = "carry"
+	BodyPartTypeAttack              = "attack"
+	// TODO(hinshun): confirm camelCase or snake_case
+	BodyPartTypeRangedAttack = "rangedAttack"
+	BodyPartTypeHeal         = "heal"
+	BodyPartTypeClaim        = "claim"
+	BodyPartTypeTough        = "tough"
+)
+
 type Color int
 
 const (
@@ -23,21 +37,21 @@ const (
 	ColorWhite
 )
 
+// CompressionType is an internal constant used to differentiate compression
+// from gzipped data from API and zlib-gzipped data from the websocket API.
+type CompressionType string
+
+const (
+	CompressionTypeGzip CompressionType = "gzip"
+	CompressionTypeZlib                 = "zlib"
+)
+
 type Error string
 
 const (
 	ErrorNone          Error = ""
 	ErrorInvalidParams       = "invalid params"
 	ErrorInvalidStatus       = "invalid status"
-)
-
-type ObjectIntent string
-
-const (
-	ObjectIntentRemove            ObjectIntent = "remove"
-	ObjectIntentSuicideCreep                   = "suicide"
-	ObjectIntentUnclaimController              = "unclaim"
-	ObjectIntentDestroyStructure               = "destroyStructure"
 )
 
 type MarketOrderType string
@@ -54,6 +68,12 @@ const (
 	MessageDirectionOut                  = "out"
 )
 
+type MineralType string
+
+const (
+	MineralTypeHydrogen MineralType = "H"
+)
+
 type MoneyOrderType string
 
 const (
@@ -62,6 +82,31 @@ const (
 	MoneyOrderTypeExtended                   = "extended"
 	MoneyOrderTypeFulfilled                  = "fulfilled"
 	MoneyOrderTypePriceChange                = "priceChange"
+)
+
+type ObjectIntent string
+
+const (
+	ObjectIntentRemove            ObjectIntent = "remove"
+	ObjectIntentSuicideCreep                   = "suicide"
+	ObjectIntentUnclaimController              = "unclaim"
+	ObjectIntentDestroyStructure               = "destroyStructure"
+)
+
+type ObjectType string
+
+const (
+	ObjectTypeController ObjectType = "controller"
+	ObjectTypeCreep                 = "creep"
+	ObjectTypeEnergy                = "energy"
+	ObjectTypeExtension             = "extension"
+	ObjectTypeMineral               = "mineral"
+	ObjectTypeRoad                  = "road"
+	ObjectTypeSource                = "source"
+	ObjectTypeSpawn                 = "spawn"
+	ObjectTypeStorage               = "storage"
+	ObjectTypeTower                 = "tower"
+	ObjectTypeWall                  = "constructedWall"
 )
 
 type RoomStatus string
