@@ -9,10 +9,10 @@ import (
 
 type RawRoomResponse struct {
 	Response
-	Flags   int                               `json:"flags"`
-	Info    screepstype.RoomInfo              `json:"info"`
-	Users   map[string]screepstype.UserObject `json:"users"`
-	Objects map[string]json.RawMessage        `json:"objects"`
+	Flags   int                         `json:"flags"`
+	Info    screepstype.RoomInfo        `json:"info"`
+	Users   map[string]screepstype.User `json:"users"`
+	Objects map[string]json.RawMessage  `json:"objects"`
 }
 
 func (r *RoomResponse) UnmarshalJSON(b []byte) error {
@@ -37,8 +37,9 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 	r.Storages = make(map[string]screepstype.Storage)
 	r.Towers = make(map[string]screepstype.Tower)
 	r.Walls = make(map[string]screepstype.Wall)
+	r.Deltas = make(map[string]json.RawMessage)
 
-	for _, rawObject := range rawRoomResp.Objects {
+	for id, rawObject := range rawRoomResp.Objects {
 		objectJSON, err := rawObject.MarshalJSON()
 		if err != nil {
 			return fmt.Errorf("failed to marshal raw object: %s", err)
@@ -57,7 +58,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into controller: %s", err)
 			}
-			r.Controllers[object.ID] = controller
+			r.Controllers[id] = controller
 
 		case screepstype.ObjectTypeCreep:
 			creep := screepstype.Creep{}
@@ -65,7 +66,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into creep: %s", err)
 			}
-			r.Creeps[object.ID] = creep
+			r.Creeps[id] = creep
 
 		case screepstype.ObjectTypeEnergy:
 			energy := screepstype.Energy{}
@@ -73,7 +74,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into energy: %s", err)
 			}
-			r.Energies[object.ID] = energy
+			r.Energies[id] = energy
 
 		case screepstype.ObjectTypeExtension:
 			extension := screepstype.Extension{}
@@ -81,7 +82,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into extension: %s", err)
 			}
-			r.Extensions[object.ID] = extension
+			r.Extensions[id] = extension
 
 		case screepstype.ObjectTypeMineral:
 			mineral := screepstype.Mineral{}
@@ -89,7 +90,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into mineral: %s", err)
 			}
-			r.Minerals[object.ID] = mineral
+			r.Minerals[id] = mineral
 
 		case screepstype.ObjectTypeRoad:
 			road := screepstype.Road{}
@@ -97,7 +98,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into road: %s", err)
 			}
-			r.Roads[object.ID] = road
+			r.Roads[id] = road
 
 		case screepstype.ObjectTypeSource:
 			source := screepstype.Source{}
@@ -105,7 +106,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into source: %s", err)
 			}
-			r.Sources[object.ID] = source
+			r.Sources[id] = source
 
 		case screepstype.ObjectTypeSpawn:
 			spawn := screepstype.Spawn{}
@@ -113,7 +114,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into spawn: %s", err)
 			}
-			r.Spawns[object.ID] = spawn
+			r.Spawns[id] = spawn
 
 		case screepstype.ObjectTypeStorage:
 			storage := screepstype.Storage{}
@@ -121,7 +122,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into storage: %s", err)
 			}
-			r.Storages[object.ID] = storage
+			r.Storages[id] = storage
 
 		case screepstype.ObjectTypeTower:
 			tower := screepstype.Tower{}
@@ -129,7 +130,7 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into tower: %s", err)
 			}
-			r.Towers[object.ID] = tower
+			r.Towers[id] = tower
 
 		case screepstype.ObjectTypeWall:
 			wall := screepstype.Wall{}
@@ -137,10 +138,15 @@ func (r *RoomResponse) UnmarshalJSON(b []byte) error {
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal into wall: %s", err)
 			}
-			r.Walls[object.ID] = wall
+			r.Walls[id] = wall
 
 		default:
-			return fmt.Errorf("unrecognized object type: %s", object.Type)
+			var rawMessage json.RawMessage
+			err = json.Unmarshal(objectJSON, &rawMessage)
+			if err != nil {
+				return fmt.Errorf("failed to unmarshal into raw message: %s", err)
+			}
+			r.Deltas[id] = rawMessage
 		}
 	}
 

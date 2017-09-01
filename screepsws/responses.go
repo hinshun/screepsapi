@@ -48,9 +48,9 @@ type NewMessageResponse struct {
 
 type RoomResponse struct {
 	Response
-	Flags       int                               `json:"flags"`
-	Info        screepstype.RoomInfo              `json:"info"`
-	Users       map[string]screepstype.UserObject `json:"users"`
+	Flags       int                         `json:"flags"`
+	Info        screepstype.RoomInfo        `json:"info"`
+	Users       map[string]screepstype.User `json:"users"`
 	Controllers map[string]screepstype.Controller
 	Creeps      map[string]screepstype.Creep
 	Energies    map[string]screepstype.Energy
@@ -62,6 +62,7 @@ type RoomResponse struct {
 	Storages    map[string]screepstype.Storage
 	Towers      map[string]screepstype.Tower
 	Walls       map[string]screepstype.Wall
+	Deltas      map[string]json.RawMessage
 }
 
 type RoomMapResponse struct {
@@ -74,6 +75,7 @@ type RoomMapResponse struct {
 	Controllers [][]int `json:"c"`
 	Minerals    [][]int `json:"m"`
 	KeeperLairs [][]int `json:"k"`
+	UserObjects map[string][][]int
 }
 
 type SetActiveBranchResponse struct {

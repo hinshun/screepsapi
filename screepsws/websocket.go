@@ -232,7 +232,7 @@ func (ws *WebSocket) receiveFrame() error {
 	}
 
 	if string(data[:len(screepstype.GzipPrefix)]) == screepstype.GzipPrefix {
-		err = ws.handleGzippedData(data)
+		data, err = ws.handleGzippedData(data)
 		if err != nil {
 			return fmt.Errorf("failed to handle gzipped data: %s", err)
 		}
@@ -271,12 +271,11 @@ func (ws *WebSocket) handleData(data []byte) error {
 	return nil
 }
 
-func (ws *WebSocket) handleGzippedData(data []byte) error {
+func (ws *WebSocket) handleGzippedData(data []byte) ([]byte, error) {
 	unzippedData, err := screepstype.Unzip(string(data), screepstype.CompressionTypeZlib)
 	if err != nil {
-		return fmt.Errorf("failed to unzip gzipped data: %s", err)
+		return nil, fmt.Errorf("failed to unzip gzipped data: %s", err)
 	}
 
-	// fmt.Printf("gzip-data: %s", unzippedData)
-	return ws.handleData(unzippedData)
+	return unzippedData, nil
 }
