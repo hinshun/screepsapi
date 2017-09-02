@@ -55,8 +55,9 @@ type LeaderboardSeasonsResponse struct {
 
 type MapStatsResponse struct {
 	Response
-	Stats map[string]screepstype.MapRoomStats `json:"stats"`
-	Users map[string]screepstype.User         `json:"users"`
+	GameTime int                                 `json:"gameTime"`
+	Stats    map[string]screepstype.MapRoomStats `json:"stats"`
+	Users    map[string]screepstype.User         `json:"users"`
 }
 
 type MeResponse struct {

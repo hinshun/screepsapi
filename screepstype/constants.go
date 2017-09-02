@@ -188,6 +188,14 @@ const (
 type WorldStatus string
 
 const (
-	WorldStatusEmpty  WorldStatus = "empty"
-	WorldStatusNormal             = "normal"
+	// WorldStatusLost is the status when the user is despawned.
+	WorldStatusLost WorldStatus = "lost"
+
+	// WorldStatusEmpty is the status when the authenticated user has respawned,
+	// but has not started their colony.
+	WorldStatusEmpty = "empty"
+
+	// WorldStatusNormal is the status when the authenticated user has respawned
+	// and started their colony.
+	WorldStatusNormal = "normal"
 )
