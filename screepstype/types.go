@@ -261,12 +261,20 @@ type RoomStats struct {
 }
 
 type RoomTerrain struct {
-	ID             string  `json:"_id"`
-	Room           string  `json:"room"`
-	X              int     `json:"x"`
-	Y              int     `json:"y"`
-	EncodedTerrain string  `json:"terrain"`
-	Type           Terrain `json:"type"`
+	ID   string `json:"_id"`
+	Room string `json:"room"`
+	X    int    `json:"x"`
+	Y    int    `json:"y"`
+
+	// EncodedTerrain is a string of digits representing the terrain from top left
+	// to bottom right. This string is empty if `encoded` is false.
+	// 0: plain
+	// 1: wall
+	// 2: swamp
+	// 3: also wall
+	EncodedTerrain string `json:"terrain"`
+
+	Type Terrain `json:"type"`
 }
 
 type Season struct {

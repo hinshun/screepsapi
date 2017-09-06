@@ -27,7 +27,7 @@ type APIClient interface {
 	Respawn() (RespawnResponse, error)
 	RespawnProhibitedRooms() (RespawnProhibitedRoomsResponse, error)
 	SuicideCreep(shard, room, id string) (UpsertResponse, error)
-	Time(shard string) (Response, error)
+	Time(shard string) (TimeResponse, error)
 	UnclaimController(shard, room, id string) (UpsertResponse, error)
 
 	// Leaderboard

@@ -7,8 +7,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"github.com/hinshun/screepsapi"
+	"github.com/hinshun/screepsapi/screepsws"
 )
 
 func test() error {
@@ -33,11 +35,41 @@ func test() error {
 		return fmt.Errorf("failed to create screepsapi client: %s", err)
 	}
 
-	version, err := client.Version()
+	ws, err := screepsws.NewWebSocket(credentials.ServerURL, client.Token())
 	if err != nil {
 		return err
 	}
-	fmt.Printf("version: %#v\n", version)
+
+	roomChan, err := ws.SubscribeRoom("shard0", "W29S85")
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		for room := range roomChan {
+			fmt.Printf("############\n")
+			fmt.Printf("Deltas: %#v\n", room.Deltas)
+			fmt.Printf("############\n")
+		}
+	}()
+
+	time.Sleep(60 * time.Second)
+
+	err = ws.UnsubscribeRoomMap("shard0", "W29S85")
+	if err != nil {
+		return err
+	}
+
+	err = ws.Close()
+	if err != nil {
+		return err
+	}
+
+	// version, err := client.Version()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("version: %#v\n", version)
 
 	// err = client.WebSocket.Connect()
 	// if err != nil {
