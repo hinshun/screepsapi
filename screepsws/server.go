@@ -2,7 +2,7 @@ package screepsws
 
 import "fmt"
 
-func (ws *WebSocket) SubscribeServerMessage() (<-chan ServerMessageResponse, error) {
+func (ws *webSocket) SubscribeServerMessage() (<-chan ServerMessageResponse, error) {
 	dataChan, err := ws.Subscribe(serverMessageFormat)
 	if err != nil {
 		return nil, fmt.Errorf("failed to subscribe to '%s'", serverMessageFormat)
@@ -24,6 +24,6 @@ func (ws *WebSocket) SubscribeServerMessage() (<-chan ServerMessageResponse, err
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeServerMessage() error {
+func (ws *webSocket) UnsubscribeServerMessage() error {
 	return ws.Unsubscribe(serverMessageFormat)
 }

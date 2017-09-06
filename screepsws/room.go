@@ -2,7 +2,7 @@ package screepsws
 
 import "fmt"
 
-func (ws *WebSocket) SubscribeRoom(shard, room string) (<-chan RoomResponse, error) {
+func (ws *webSocket) SubscribeRoom(shard, room string) (<-chan RoomResponse, error) {
 	channel := fmt.Sprintf(roomFormat, shard, room)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -25,11 +25,11 @@ func (ws *WebSocket) SubscribeRoom(shard, room string) (<-chan RoomResponse, err
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeRoom(shard, room string) error {
+func (ws *webSocket) UnsubscribeRoom(shard, room string) error {
 	return ws.Unsubscribe(fmt.Sprintf(roomFormat, shard, room))
 }
 
-func (ws *WebSocket) SubscribeRoomMap(shard, room string) (<-chan RoomMapResponse, error) {
+func (ws *webSocket) SubscribeRoomMap(shard, room string) (<-chan RoomMapResponse, error) {
 	channel := fmt.Sprintf(roomMapFormat, shard, room)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -52,6 +52,6 @@ func (ws *WebSocket) SubscribeRoomMap(shard, room string) (<-chan RoomMapRespons
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeRoomMap(shard, room string) error {
+func (ws *webSocket) UnsubscribeRoomMap(shard, room string) error {
 	return ws.Unsubscribe(fmt.Sprintf(roomMapFormat, shard, room))
 }

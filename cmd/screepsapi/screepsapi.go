@@ -40,7 +40,7 @@ func test() error {
 		return err
 	}
 
-	roomChan, err := ws.SubscribeRoom("shard0", "W29S85")
+	roomChan, err := ws.SubscribeRoomMap("shard1", "E17N1")
 	if err != nil {
 		return err
 	}
@@ -48,14 +48,14 @@ func test() error {
 	go func() {
 		for room := range roomChan {
 			fmt.Printf("############\n")
-			fmt.Printf("Deltas: %#v\n", room.Deltas)
+			fmt.Printf("Objects: %#v\n", room.UserObjects)
 			fmt.Printf("############\n")
 		}
 	}()
 
 	time.Sleep(60 * time.Second)
 
-	err = ws.UnsubscribeRoomMap("shard0", "W29S85")
+	err = ws.UnsubscribeRoomMap("shard1", "E17N1")
 	if err != nil {
 		return err
 	}

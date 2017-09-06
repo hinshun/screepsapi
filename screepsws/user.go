@@ -2,7 +2,7 @@ package screepsws
 
 import "fmt"
 
-func (ws *WebSocket) SubscribeCode(userID string) (<-chan CodeResponse, error) {
+func (ws *webSocket) SubscribeCode(userID string) (<-chan CodeResponse, error) {
 	channel := fmt.Sprintf(codeFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -25,11 +25,11 @@ func (ws *WebSocket) SubscribeCode(userID string) (<-chan CodeResponse, error) {
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeCode(userID string) error {
+func (ws *webSocket) UnsubscribeCode(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(codeFormat, userID))
 }
 
-func (ws *WebSocket) SubscribeConsole(userID string) (<-chan ConsoleResponse, error) {
+func (ws *webSocket) SubscribeConsole(userID string) (<-chan ConsoleResponse, error) {
 	channel := fmt.Sprintf(consoleFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -52,11 +52,11 @@ func (ws *WebSocket) SubscribeConsole(userID string) (<-chan ConsoleResponse, er
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeConsole(userID string) error {
+func (ws *webSocket) UnsubscribeConsole(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(consoleFormat, userID))
 }
 
-func (ws *WebSocket) SubscribeCPU(userID string) (<-chan CPUResponse, error) {
+func (ws *webSocket) SubscribeCPU(userID string) (<-chan CPUResponse, error) {
 	channel := fmt.Sprintf(cpuFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -79,11 +79,11 @@ func (ws *WebSocket) SubscribeCPU(userID string) (<-chan CPUResponse, error) {
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeCPU(userID string) error {
+func (ws *webSocket) UnsubscribeCPU(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(cpuFormat, userID))
 }
 
-func (ws *WebSocket) SubscribeMemory(userID, path string) (<-chan MemoryResponse, error) {
+func (ws *webSocket) SubscribeMemory(userID, path string) (<-chan MemoryResponse, error) {
 	channel := fmt.Sprintf(memoryFormat, userID, path)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -106,11 +106,11 @@ func (ws *WebSocket) SubscribeMemory(userID, path string) (<-chan MemoryResponse
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeMemory(userID, path string) error {
+func (ws *webSocket) UnsubscribeMemory(userID, path string) error {
 	return ws.Unsubscribe(fmt.Sprintf(memoryFormat, userID, path))
 }
 
-func (ws *WebSocket) SubscribeMessage(userID, respondentID string) (<-chan MessageResponse, error) {
+func (ws *webSocket) SubscribeMessage(userID, respondentID string) (<-chan MessageResponse, error) {
 	channel := fmt.Sprintf(messageFormat, userID, respondentID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -133,11 +133,11 @@ func (ws *WebSocket) SubscribeMessage(userID, respondentID string) (<-chan Messa
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeMessage(userID, respondentID string) error {
+func (ws *webSocket) UnsubscribeMessage(userID, respondentID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(messageFormat, userID, respondentID))
 }
 
-func (ws *WebSocket) SubscribeMoney(userID string) (<-chan int, error) {
+func (ws *webSocket) SubscribeMoney(userID string) (<-chan int, error) {
 	channel := fmt.Sprintf(moneyFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -160,11 +160,11 @@ func (ws *WebSocket) SubscribeMoney(userID string) (<-chan int, error) {
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeMoney(userID string) error {
+func (ws *webSocket) UnsubscribeMoney(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(moneyFormat, userID))
 }
 
-func (ws *WebSocket) SubscribeNewMessage(userID string) (<-chan NewMessageResponse, error) {
+func (ws *webSocket) SubscribeNewMessage(userID string) (<-chan NewMessageResponse, error) {
 	channel := fmt.Sprintf(newMessageFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -187,11 +187,11 @@ func (ws *WebSocket) SubscribeNewMessage(userID string) (<-chan NewMessageRespon
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeNewMessage(userID string) error {
+func (ws *webSocket) UnsubscribeNewMessage(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(newMessageFormat, userID))
 }
 
-func (ws *WebSocket) SubscribeSetActiveBranch(userID string) (<-chan SetActiveBranchResponse, error) {
+func (ws *webSocket) SubscribeSetActiveBranch(userID string) (<-chan SetActiveBranchResponse, error) {
 	channel := fmt.Sprintf(setActiveBranchFormat, userID)
 	dataChan, err := ws.Subscribe(channel)
 	if err != nil {
@@ -214,6 +214,6 @@ func (ws *WebSocket) SubscribeSetActiveBranch(userID string) (<-chan SetActiveBr
 	return respChan, nil
 }
 
-func (ws *WebSocket) UnsubscribeSetActiveBranch(userID string) error {
+func (ws *webSocket) UnsubscribeSetActiveBranch(userID string) error {
 	return ws.Unsubscribe(fmt.Sprintf(setActiveBranchFormat, userID))
 }

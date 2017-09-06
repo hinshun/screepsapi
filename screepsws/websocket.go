@@ -11,7 +11,7 @@ import (
 	"github.com/hinshun/screepsapi/screepstype"
 )
 
-type WebSocket struct {
+type webSocket struct {
 	conn          *websocket.Conn
 	serverURL     *url.URL
 	token         string
@@ -22,13 +22,13 @@ type WebSocket struct {
 	subscriptions map[string]chan []byte
 }
 
-func NewWebSocket(rawServerURL, token string) (*WebSocket, error) {
+func NewWebSocket(rawServerURL, token string) (WebSocket, error) {
 	serverURL, err := url.Parse(rawServerURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse server url '%s': %s", rawServerURL, err)
 	}
 
-	ws := &WebSocket{
+	ws := &webSocket{
 		serverURL:     serverURL,
 		token:         token,
 		interrupt:     make(chan struct{}),
@@ -43,7 +43,7 @@ func NewWebSocket(rawServerURL, token string) (*WebSocket, error) {
 	return ws, nil
 }
 
-func (ws *WebSocket) Close() error {
+func (ws *webSocket) Close() error {
 	if ws.conn == nil {
 		return fmt.Errorf("websocket is not connected")
 	}
@@ -64,7 +64,7 @@ func (ws *WebSocket) Close() error {
 	return nil
 }
 
-func (ws *WebSocket) Subscribe(channel string) (<-chan []byte, error) {
+func (ws *webSocket) Subscribe(channel string) (<-chan []byte, error) {
 	_, exists := ws.subscriptions[channel]
 	if exists {
 		return nil, fmt.Errorf("channel '%s' already subscribed", channel)
@@ -81,7 +81,7 @@ func (ws *WebSocket) Subscribe(channel string) (<-chan []byte, error) {
 	return dataChan, nil
 }
 
-func (ws *WebSocket) Unsubscribe(channel string) error {
+func (ws *webSocket) Unsubscribe(channel string) error {
 	err := ws.send(fmt.Sprintf(unsubscribeFormat, channel))
 	if err != nil {
 		return fmt.Errorf("failed to unsubscribe: %s", err)
@@ -96,7 +96,7 @@ func (ws *WebSocket) Unsubscribe(channel string) error {
 	return nil
 }
 
-func (ws *WebSocket) connect() error {
+func (ws *webSocket) connect() error {
 	if ws.conn != nil {
 		return fmt.Errorf("websocket is already connected")
 	}
@@ -126,7 +126,7 @@ func (ws *WebSocket) connect() error {
 	return nil
 }
 
-func (ws *WebSocket) authenticate(token string) error {
+func (ws *webSocket) authenticate(token string) error {
 	err := ws.conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(authFormat, ws.token)))
 	if err != nil {
 		return fmt.Errorf("failed to authenticate: %s", err)
@@ -134,7 +134,7 @@ func (ws *WebSocket) authenticate(token string) error {
 	return nil
 }
 
-func (ws *WebSocket) setGZIP(enable bool) error {
+func (ws *webSocket) setGZIP(enable bool) error {
 	arg := "off"
 	if enable {
 		arg = "on"
@@ -147,7 +147,7 @@ func (ws *WebSocket) setGZIP(enable bool) error {
 	return nil
 }
 
-func (ws *WebSocket) send(data string) error {
+func (ws *webSocket) send(data string) error {
 	ws.authLock.RLock()
 	defer ws.authLock.RUnlock()
 	if !ws.authenticated {
@@ -163,7 +163,7 @@ func (ws *WebSocket) send(data string) error {
 	return nil
 }
 
-func (ws *WebSocket) receive() (data []byte, err error) {
+func (ws *webSocket) receive() (data []byte, err error) {
 	_, data, err = ws.conn.ReadMessage()
 	if err != nil {
 		return
@@ -172,7 +172,7 @@ func (ws *WebSocket) receive() (data []byte, err error) {
 	return
 }
 
-func (ws *WebSocket) listen() {
+func (ws *webSocket) listen() {
 	for i := 0; i < 4; i++ {
 		_, err := ws.receive()
 		if err != nil {
@@ -207,7 +207,7 @@ func (ws *WebSocket) listen() {
 	}
 }
 
-func (ws *WebSocket) receiveFrame() error {
+func (ws *webSocket) receiveFrame() error {
 	// When the websocket connection is closed, a blocking receive will exit due
 	// to the closed connection, however gorilla/websocket then panics with nil
 	// pointer exception now that the connection is closed.
@@ -246,7 +246,7 @@ func (ws *WebSocket) receiveFrame() error {
 	return nil
 }
 
-func (ws *WebSocket) handleData(data []byte) error {
+func (ws *webSocket) handleData(data []byte) error {
 	resp := make([]json.RawMessage, 2)
 	err := json.Unmarshal(data, &resp)
 	if err != nil {
@@ -271,7 +271,7 @@ func (ws *WebSocket) handleData(data []byte) error {
 	return nil
 }
 
-func (ws *WebSocket) handleGzippedData(data []byte) ([]byte, error) {
+func (ws *webSocket) handleGzippedData(data []byte) ([]byte, error) {
 	unzippedData, err := screepstype.Unzip(string(data), screepstype.CompressionTypeZlib)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unzip gzipped data: %s", err)
