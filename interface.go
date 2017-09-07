@@ -63,7 +63,7 @@ type APIClient interface {
 	// User
 	UserFind(id, username string) (UserFindResponse, error)
 	UserOverview(statName screepstype.StatName, statsPeriod screepstype.StatsPeriod) (UserOverviewResponse, error)
-	UserRooms() (UserRoomsResponse, error)
+	UserRooms(id string) (UserRoomsResponse, error)
 	UserStats(id string, statsPeriod screepstype.StatsPeriod) (UserStatsResponse, error)
 
 	// Version

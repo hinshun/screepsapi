@@ -46,11 +46,15 @@ func (c *Client) UserOverview(statName screepstype.StatName, statsPeriod screeps
 	return userOverviewResp, nil
 }
 
-func (c *Client) UserRooms() (UserRoomsResponse, error) {
+func (c *Client) UserRooms(id string) (UserRoomsResponse, error) {
 	userRoomsResp := UserRoomsResponse{}
-	err := c.get(userRoomsPath, &userRoomsResp, nil, http.StatusOK)
+
+	values := make(url.Values)
+	values.Add(idKey, id)
+
+	err := c.get(userRoomsPath, &userRoomsResp, values, http.StatusOK)
 	if err != nil {
-		return userRoomsResp, fmt.Errorf("failed to get user respawn prohibited rooms: %s", err)
+		return userRoomsResp, fmt.Errorf("failed to get user rooms: %s", err)
 	}
 
 	return userRoomsResp, nil
